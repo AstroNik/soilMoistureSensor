@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Soil Moisture Sensor</string>
+    <string name="signup">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="username">User Name</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="fullname">Full Name</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="create_a_personal_account_to_keep_track_of_your_plant_s_progress">Create a personal account to keep track of your plant\'s progress</string>
+    <string name="terms">I agree to the terms and conditions</string>
+</resources>
