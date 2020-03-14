@@ -1,5 +1,0 @@
-<application>
-  <component name="IntentionManagerSettings">
-    <ignoreAction name="Kotlin/Introduce import alias" />
-  </component>
-</application>
