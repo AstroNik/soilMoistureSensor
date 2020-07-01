@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "720071628416",
+    "firebase_url": "https://soilmoisturesensorapp.firebaseio.com",
+    "project_id": "soilmoisturesensorapp",
+    "storage_bucket": "soilmoisturesensorapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720071628416:android:2b068dd7b2f896a0623865",
+        "android_client_info": {
+          "package_name": "com.example.soilmoisturesensor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "720071628416-8us1j70023vsjlgsln7afpi09gg2o580.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.soilmoisturesensor",
+            "certificate_hash": "9964502f35995f34e135da514c037acedc301d36"
+          }
+        },
+        {
+          "client_id": "720071628416-dngubbj4v31h1cvsn87804uvbp15kop3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJfBjfjhvCo9lbT9YWP2xureyRI057MKY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "720071628416-dngubbj4v31h1cvsn87804uvbp15kop3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

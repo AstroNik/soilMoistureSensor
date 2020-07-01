@@ -8,12 +8,12 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/userName"
-        android:layout_width="163dp"
-        android:layout_height="46dp"
+        android:id="@+id/email1"
+        android:layout_width="156dp"
+        android:layout_height="51dp"
         android:ems="10"
-        android:hint="User Name"
-        android:inputType="textPersonName"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.178"
@@ -63,8 +63,8 @@
 
     <TextView
         android:id="@+id/errorUserName"
-        android:layout_width="293dp"
-        android:layout_height="39dp"
+        android:layout_width="292dp"
+        android:layout_height="43dp"
         android:textColor="@android:color/holo_red_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
