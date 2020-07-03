@@ -12,13 +12,14 @@ import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class SignUp : AppCompatActivity() {
 
-    // Initialize Firebase Auth
-    val mAuth = FirebaseAuth.getInstance()
+    private lateinit var mAuth:FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance()
 
         ok.setOnClickListener(View.OnClickListener { view-> register()
 
@@ -34,7 +35,7 @@ class SignUp : AppCompatActivity() {
     private fun register(){
 
         val mName = fullName.text.toString()
-        val mEmail = Email.text.toString()
+        val mEmail = emailAddress.text.toString()
         val mPwd = password1.text.toString()
         val mPwd1 = password2.text.toString()
 
@@ -49,6 +50,8 @@ class SignUp : AppCompatActivity() {
                             //val user = mAuth.currentUser
                             //val uid = user!!.uid
                             // mDB.child(uid).child("Names").setValue(mName)
+
+                            /*****-------- DB Code -------------*****/
 
                             /*****-------- DB Code -------------*****/
 

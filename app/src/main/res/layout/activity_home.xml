@@ -7,129 +7,135 @@
     android:background="@drawable/home"
     tools:context=".Home">
 
-    <ImageButton
-        android:id="@+id/imageButton"
+    <LinearLayout
+        android:id="@+id/linearLayout7"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="122dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginBottom="119dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton4"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/acc_setup" />
-
-    <ImageButton
-        android:id="@+id/imageButton4"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginBottom="120dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton7"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
-
-    <ImageButton
-        android:id="@+id/imageButton6"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="120dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton9"
+        android:layout_height="455dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="278dp"
+        android:layout_marginEnd="1dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton5"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton3"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
-
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="122dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginBottom="119dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton5"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton3"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
-
-    <ImageButton
-        android:id="@+id/imageButton7"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginBottom="121dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton4"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageButton
-        android:id="@+id/imageButton8"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginBottom="121dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton9"
-        app:layout_constraintStart_toEndOf="@+id/imageButton7"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton5"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
 
-    <ImageButton
-        android:id="@+id/imageButton5"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginBottom="120dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton8"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton6"
-        app:layout_constraintStart_toEndOf="@+id/imageButton4"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton2"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="411dp"
+            android:layout_height="88dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-    <ImageButton
-        android:id="@+id/imageButton9"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="121dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton8"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton6"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
+            <Button
+                android:id="@+id/AccountSetup"
+                android:layout_width="93dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/home_buttons"
+                android:text="Account\nSetup" />
 
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="122dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="119dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
+            <Button
+                android:id="@+id/Login"
+                android:layout_width="93dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/home_buttons"
+                android:text="Login" />
 
-    <Button
-        android:id="@+id/SignOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="LogOut"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/DeviceConnection"
+                android:layout_width="93dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/home_buttons"
+                android:text="Device\nConnection" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="411dp"
+            android:layout_height="88dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/PlantDatabase"
+                android:layout_width="93dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/home_buttons"
+                android:text="Plant\nDatabase" />
+
+            <Button
+                android:id="@+id/YourPlants"
+                android:layout_width="93dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/home_buttons"
+                android:text="Your\nPlants" />
+
+
+            <Button
+                android:id="@+id/loadSensorDetail"
+                android:layout_width="93dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/home_buttons"
+                android:onClick="loadSensorDetail"
+                android:text="Sensor\nDetails" />
+
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="409dp"
+            android:layout_height="88dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/PlantProgress"
+                android:layout_width="93dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/home_buttons"
+                android:text="Plant\nProgress" />
+
+            <Button
+                android:id="@+id/VirtualGame"
+                android:layout_width="93dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/home_buttons"
+                android:onClick="loadGame"
+                android:text="Game" />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="411dp"
+            android:layout_height="88dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/logOut"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ok_button"
+                android:onClick="logOut"
+                android:text="Log Out" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

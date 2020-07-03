@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "720071628416-h9en8dkb3ivinb0q91tb6bki4jk3i3mf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.soilmoisturesensor",
+            "certificate_hash": "d7b525f7714ec91b8259a1c3ee13dcb195c1a0f1"
+          }
+        },
+        {
           "client_id": "720071628416-8us1j70023vsjlgsln7afpi09gg2o580.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
