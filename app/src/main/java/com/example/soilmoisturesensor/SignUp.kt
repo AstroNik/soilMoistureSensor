@@ -1,10 +1,7 @@
 package com.example.soilmoisturesensor
 
 import android.content.Intent
-<<<<<<< HEAD
 import android.net.NetworkRequest
-=======
->>>>>>> 77bdd5649c64d5c631f2476293a55000f82fa939
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,13 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_sign_up.*
-<<<<<<< HEAD
 import java.io.*
 import java.net.URL
 import java.net.URLEncoder
 import javax.net.ssl.HttpsURLConnection
-=======
->>>>>>> 77bdd5649c64d5c631f2476293a55000f82fa939
+
 
 
 class SignUp : AppCompatActivity() {
@@ -27,10 +22,7 @@ class SignUp : AppCompatActivity() {
     // Initialize Firebase Auth
     val mAuth = FirebaseAuth.getInstance()
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 77bdd5649c64d5c631f2476293a55000f82fa939
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -71,7 +63,7 @@ class SignUp : AppCompatActivity() {
                                         val idToken = task.result!!.token
                                         //TODO: Send User's Name/LastName Email and idToken
                                         val uid = mUser.uid
-<<<<<<< HEAD
+
                                         val email = mEmail  //sub this out to just mEmail when sending
 
                                         val firstSpace =  mName.indexOf(" ")
@@ -81,15 +73,8 @@ class SignUp : AppCompatActivity() {
                                         val token = idToken // can simply just pass
 
                                         //THE ENDPOINT IS https://www.ecoders.ca/addUser
+                                        //Invoking the SendPost Request Method
                                         sendPostRequest(firstName,lastName,email,token.toString())
-=======
-                                        val email = mEmail //sub this out to just mEmail when sending
-                                        val firstName = mName //split this into first and last name in the form
-                                        val lastName = mName
-                                        val token = idToken // can simply just pass
-                                        //THE ENDPOINT IS https://www.ecoders.ca/addUser
->>>>>>> 77bdd5649c64d5c631f2476293a55000f82fa939
-
 
 
                                     } else {
@@ -114,7 +99,6 @@ class SignUp : AppCompatActivity() {
             Toast.makeText(this, "Please fill values", Toast.LENGTH_SHORT).show()
         }
     }
-<<<<<<< HEAD
 
     //Post Request Method
     fun sendPostRequest(fName:String, lName:String, email:String, token: String){
@@ -157,6 +141,5 @@ class SignUp : AppCompatActivity() {
 
 
     }
-=======
->>>>>>> 77bdd5649c64d5c631f2476293a55000f82fa939
+
 }
