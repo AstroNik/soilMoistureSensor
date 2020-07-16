@@ -24,8 +24,8 @@
         android:layout_width="163dp"
         android:layout_height="45dp"
         android:ems="10"
-        android:hint="@string/password2"
-        android:inputType="text|textPassword"
+        android:hint="Retype Password"
+        android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -34,11 +34,11 @@
         app:layout_constraintVertical_bias="0.58" />
 
     <EditText
-        android:id="@+id/Email"
+        android:id="@+id/emailAddress"
         android:layout_width="163dp"
         android:layout_height="46dp"
         android:ems="10"
-        android:hint="@string/email"
+        android:hint="Email Address"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
