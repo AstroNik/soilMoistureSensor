@@ -21,8 +21,8 @@ class MainActivity : AppCompatActivity() {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance()
 
-        login.setOnClickListener(View.OnClickListener {
-                view -> signIn()
+        signin.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(this,SignIn::class.java ))
         })
 
         signup.setOnClickListener(View.OnClickListener {
@@ -31,33 +31,7 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-    private fun signIn(){
 
-        val email = email.text.toString()
-        val pwd = password.text.toString()
-
-        if(!email.isEmpty() && !pwd.isEmpty()){
-
-            mAuth.signInWithEmailAndPassword(email, pwd).addOnCompleteListener(this, OnCompleteListener { task ->
-
-                if(task.isSuccessful){
-
-                    startActivity(Intent(this, Home::class.java))
-                    Toast.makeText(this, "Login Successful", Toast.LENGTH_LONG).show()
-                }
-                else
-                {
-                    Toast.makeText(this, "Invalid credentials", Toast.LENGTH_LONG).show()
-                }
-            })
-        }
-        else
-        {
-            Toast.makeText(this, "Please fill values", Toast.LENGTH_SHORT).show()
-        }
-
-
-    }
 
     private fun register(){
 
