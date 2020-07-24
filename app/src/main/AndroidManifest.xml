@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SignIn"></activity>
+        <activity android:name=".ResetPassword"></activity>
+        <activity android:name=".SignIn" />
         <activity android:name=".Game" />
         <activity android:name=".SensorDetail" />
         <activity android:name=".Home" />

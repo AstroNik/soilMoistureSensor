@@ -30,6 +30,10 @@ class SignIn : AppCompatActivity() {
         goBack.setOnClickListener{
             finish()
         }
+
+        resetPasswordLink.setOnClickListener{
+            startActivity(Intent(this, ResetPassword::class.java))
+        }
     }
 
     private fun signIn(){
