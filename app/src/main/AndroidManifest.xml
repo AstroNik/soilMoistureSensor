@@ -17,7 +17,10 @@
         <activity android:name=".SignIn" />
         <activity android:name=".Game" />
         <activity android:name=".SensorDetail" />
-        <activity android:name=".Home" />
+        <activity android:name=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity android:name=".SignUp" />
         <activity android:name=".MainActivity">
             <intent-filter>

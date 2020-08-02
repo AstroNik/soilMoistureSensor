@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+
+        <item
+            android:id="@+id/DeviceConnection"
+            android:title="Device Connection"
+            android:icon="@drawable/ic_action_connection"
+            />
+        <item
+            android:id="@+id/PlantDatabase"
+            android:title="Plant Database"
+            android:icon="@drawable/ic_action_database"
+            />
+        <item
+            android:id="@+id/YourPlants"
+            android:title="Your Plants"
+            android:icon="@drawable/ic_action_plant"
+            />
+        <item
+            android:id="@+id/SensorDetails"
+            android:title="Sensor Details"
+            android:icon="@drawable/ic_action_details"
+            />
+        <item
+            android:id="@+id/PlantProgress"
+            android:title="Plant Progress"
+            android:icon="@drawable/ic_action_progress"
+            />
+        <item
+            android:id="@+id/Game"
+            android:title="Game"
+            android:icon="@drawable/ic_action_game"
+            />
+
+    </group>
+
+
+    <item android:title="Setup">
+        <menu>
+            <item
+                android:id="@+id/AccountSetup"
+                android:title="Account Setup"
+                android:icon="@drawable/ic_action_setup"
+                />
+
+            <item
+                android:id="@+id/Logout"
+                android:title="Logout"
+                android:icon="@drawable/ic_action_logout"
+                />
+
+        </menu>
+    </item>
+
+
+</menu>
