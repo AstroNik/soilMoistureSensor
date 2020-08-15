@@ -106,7 +106,7 @@ class SignUp : AppCompatActivity() {
 
 
         //Req. Parameters
-        var reqParam = URLEncoder.encode("uid", "UTF-8") + "=" + URLEncoder.encode(fName, "UTF-8")
+        var reqParam = URLEncoder.encode("uid", "UTF-8") + "=" + URLEncoder.encode(uid, "UTF-8")
         reqParam += "&" + URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8")
         reqParam += "&" + URLEncoder.encode("fname", "UTF-8") + "=" + URLEncoder.encode(fName, "UTF-8")
         reqParam += "&" + URLEncoder.encode("lname", "UTF-8") + "=" + URLEncoder.encode(lName, "UTF-8")
