@@ -2,6 +2,7 @@ package com.example.soilmoisturesensor
 
 import android.content.Intent
 import android.net.NetworkRequest
+import android.net.http.HttpResponseCache
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -74,7 +75,7 @@ class SignUp : AppCompatActivity() {
 
                                         //THE ENDPOINT IS https://www.ecoders.ca/addUser
                                         //Invoking the SendPost Request Method
-                                        sendPostRequest(firstName,lastName,email,token.toString())
+                                        sendPostRequest(uid.toString(), email, firstName,lastName,token.toString());
 
 
                                     } else {
@@ -101,18 +102,29 @@ class SignUp : AppCompatActivity() {
     }
 
     //Post Request Method
-    fun sendPostRequest(fName:String, lName:String, email:String, token: String){
+    fun sendPostRequest(uid:String, email:String, fName:String, lName:String, token: String){
+
 
         //Req. Parameters
-        var reqParam = URLEncoder.encode("fname", "UTF-8") + "=" + URLEncoder.encode(fName, "UTF-8")
-        reqParam += "&" + URLEncoder.encode("lname", "UTF-8") + "=" + URLEncoder.encode(lName, "UTF-8")
+        var reqParam = URLEncoder.encode("uid", "UTF-8") + "=" + URLEncoder.encode(fName, "UTF-8")
         reqParam += "&" + URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8")
+        reqParam += "&" + URLEncoder.encode("fname", "UTF-8") + "=" + URLEncoder.encode(fName, "UTF-8")
+        reqParam += "&" + URLEncoder.encode("lname", "UTF-8") + "=" + URLEncoder.encode(lName, "UTF-8")
         reqParam += "&" + URLEncoder.encode("token", "UTF-8") + "=" + URLEncoder.encode(token, "UTF-8")
 
         //ENDPOINT SERVER URL
         val mURL = URL("https://www.ecoders.ca/addUser")
 
-        with(mURL.openConnection() as HttpsURLConnection){
+        //mURL.addRequestProperty("AUTHORIZATON", token);
+        var connection: HttpsURLConnection;
+
+        connection = mURL.openConnection() as HttpsURLConnection;
+
+        connection.addRequestProperty("Authorization",token);
+        connection.addRequestProperty("Content-Type","application/json");
+        connection.connect();
+
+        with(connection){
 
             requestMethod = "POST"
 
