@@ -11,17 +11,21 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_sign_up.*
+import okhttp3.*
+import org.json.JSONObject
 import java.io.*
 import java.net.URL
 import java.net.URLEncoder
 import javax.net.ssl.HttpsURLConnection
 
+private val client = OkHttpClient()
 
 
 class SignUp : AppCompatActivity() {
 
     // Initialize Firebase Auth
     val mAuth = FirebaseAuth.getInstance()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,54 +108,78 @@ class SignUp : AppCompatActivity() {
     //Post Request Method
     fun sendPostRequest(uid:String, email:String, fName:String, lName:String, token: String){
 
+        // Use the imgur image upload API as documented at https://api.imgur.com/endpoints/image
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("uid", uid)
+            .addFormDataPart("email", email)
+            .addFormDataPart("firstName", fName)
+            .addFormDataPart("lastName", lName)
+            .addFormDataPart("lastName", token)
+            .build()
 
-        //Req. Parameters
-        var reqParam = URLEncoder.encode("uid", "UTF-8") + "=" + URLEncoder.encode(uid, "UTF-8")
-        reqParam += "&" + URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8")
-        reqParam += "&" + URLEncoder.encode("fname", "UTF-8") + "=" + URLEncoder.encode(fName, "UTF-8")
-        reqParam += "&" + URLEncoder.encode("lname", "UTF-8") + "=" + URLEncoder.encode(lName, "UTF-8")
-        reqParam += "&" + URLEncoder.encode("token", "UTF-8") + "=" + URLEncoder.encode(token, "UTF-8")
+        val request = Request.Builder()
+            .header("Authorization", token)
+            .url("https://www.ecoders.ca/addUser")
+            .post(requestBody)
+            .build()
 
-        //ENDPOINT SERVER URL
-        val mURL = URL("https://www.ecoders.ca/addUser")
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-        //mURL.addRequestProperty("AUTHORIZATON", token);
-        var connection: HttpsURLConnection;
-
-        connection = mURL.openConnection() as HttpsURLConnection;
-
-        connection.addRequestProperty("Authorization",token);
-        connection.addRequestProperty("Content-Type","application/json");
-        connection.connect();
-
-        with(connection){
-
-            requestMethod = "POST"
-
-            val wr = OutputStreamWriter(outputStream)
-            wr.write(reqParam)
-            wr.flush()
-
-            println("URL : $url")
-            println("Response Code : $responseCode")
-
-            BufferedReader(InputStreamReader(inputStream)).use{
-
-                val response = StringBuffer()
-
-                var inputLine = it.readLine()
-
-                while (inputLine != null){
-
-                    response.append(inputLine)
-                    inputLine = it.readLine()
-                }
-
-                println("Response: $response")
-            }
+            println(response.body().toString())
         }
+
+//        //Req. Parameters
+//        var reqParam = URLEncoder.encode("uid", "UTF-8") + "=" + URLEncoder.encode(uid, "UTF-8")
+//        reqParam += "&" + URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8")
+//        reqParam += "&" + URLEncoder.encode("fname", "UTF-8") + "=" + URLEncoder.encode(fName, "UTF-8")
+//        reqParam += "&" + URLEncoder.encode("lname", "UTF-8") + "=" + URLEncoder.encode(lName, "UTF-8")
+//        reqParam += "&" + URLEncoder.encode("token", "UTF-8") + "=" + URLEncoder.encode(token, "UTF-8")
+//
+//        //ENDPOINT SERVER URL
+//        val mURL = URL("https://www.ecoders.ca/addUser")
+//
+//        //mURL.addRequestProperty("AUTHORIZATON", token);
+//        var connection: HttpsURLConnection;
+//
+//        connection = mURL.openConnection() as HttpsURLConnection;
+//
+//        connection.addRequestProperty("Authorization",token);
+//        connection.addRequestProperty("Content-Type","application/json");
+//        //connection.connect();
+//
+//        with(connection){
+//
+//            requestMethod = "POST"
+//
+//            val wr = OutputStreamWriter(outputStream)
+//            wr.write(reqParam)
+//            wr.flush()
+//
+//            println("URL : $url")
+//            println("Response Code : $responseCode")
+//
+//            BufferedReader(InputStreamReader(inputStream)).use{
+//
+//                val response = StringBuffer()
+//
+//                var inputLine = it.readLine()
+//
+//                while (inputLine != null){
+//
+//                    response.append(inputLine)
+//                    inputLine = it.readLine()
+//                }
+//
+//                println("Response: $response")
+//            }
+//        }
+
 
 
     }
 
-}
+
+
+    }
