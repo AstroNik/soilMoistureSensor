@@ -1,24 +1,30 @@
 package com.example.soilmoisturesensor
 
 import android.content.Intent
-import android.net.NetworkRequest
-import android.net.http.HttpResponseCache
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.beust.klaxon.Json
+import com.beust.klaxon.JsonObject
+import com.beust.klaxon.Klaxon
+import com.beust.klaxon.Parser
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_sign_up.*
-import okhttp3.*
+import okhttp3.OkHttpClient
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
+import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLEncoder
-import javax.net.ssl.HttpsURLConnection
+
 
 private val client = OkHttpClient()
+private val TAG = "";
+
 
 
 class SignUp : AppCompatActivity() {
@@ -26,6 +32,13 @@ class SignUp : AppCompatActivity() {
     // Initialize Firebase Auth
     val mAuth = FirebaseAuth.getInstance()
 
+    //declaring the variables
+
+    var muid = ""
+    var memail = ""
+    var mfirstName = ""
+    var mlastName = ""
+    var mtoken = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,23 +80,23 @@ class SignUp : AppCompatActivity() {
                                     if (task.isSuccessful) {
                                         val idToken = task.result!!.token
                                         //TODO: Send User's Name/LastName Email and idToken
-                                        val uid = mUser.uid
+                                        muid = mUser.uid
 
-                                        val email = mEmail  //sub this out to just mEmail when sending
+                                        memail = mEmail  //sub this out to just mEmail when sending
 
-                                        val firstSpace =  mName.indexOf(" ")
-                                        val firstName = mName.substring(0, firstSpace) //split this into first and last name in the form
-                                        val lastName = mName.substring(firstSpace).trim()
+                                        val firstSpace = mName.indexOf(" ")
+                                        mfirstName = mName.substring(0, firstSpace)
+                                        //split this into first and last name in the form
+                                        mlastName = mName.substring(firstSpace).trim()
 
-                                        val token = idToken // can simply just pass
+                                        mtoken = idToken.toString() // can simply just pass
 
                                         //THE ENDPOINT IS https://www.ecoders.ca/addUser
-                                        //Invoking the SendPost Request Method
-                                        sendPostRequest(uid.toString(), email, firstName,lastName,token.toString());
-
+                                        //Invoking the Senddatatoserver using POST Request Method
+                                        senddatatoserver();
 
                                     } else {
-                                        Log.d("ERROR Creating Token",task.exception.toString());
+                                        Log.d("ERROR Creating Token", task.exception.toString());
                                     }
                                 }
 
@@ -105,81 +118,94 @@ class SignUp : AppCompatActivity() {
         }
     }
 
-    //Post Request Method
-    fun sendPostRequest(uid:String, email:String, fName:String, lName:String, token: String){
+    //sendDataToServerFunction
+    fun senddatatoserver() {
 
-        // Use the imgur image upload API as documented at https://api.imgur.com/endpoints/image
-        val requestBody = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart("uid", uid)
-            .addFormDataPart("email", email)
-            .addFormDataPart("firstName", fName)
-            .addFormDataPart("lastName", lName)
-            .addFormDataPart("lastName", token)
-            .build()
+        //JSON OBJECT
+        val r  = JSONObject()
+    r.put("uid", muid)
+    r.put("email", memail)
+    r.put("firstName", mfirstName)
+    r.put("lastName", mlastName)
+    r.put("token",mtoken)
 
-        val request = Request.Builder()
-            .header("Authorization", token)
-            .url("https://www.ecoders.ca/addUser")
-            .post(requestBody)
-            .build()
-
-        client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
-
-            println(response.body().toString())
-        }
-
-//        //Req. Parameters
-//        var reqParam = URLEncoder.encode("uid", "UTF-8") + "=" + URLEncoder.encode(uid, "UTF-8")
-//        reqParam += "&" + URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8")
-//        reqParam += "&" + URLEncoder.encode("fname", "UTF-8") + "=" + URLEncoder.encode(fName, "UTF-8")
-//        reqParam += "&" + URLEncoder.encode("lname", "UTF-8") + "=" + URLEncoder.encode(lName, "UTF-8")
-//        reqParam += "&" + URLEncoder.encode("token", "UTF-8") + "=" + URLEncoder.encode(token, "UTF-8")
-//
-//        //ENDPOINT SERVER URL
-//        val mURL = URL("https://www.ecoders.ca/addUser")
-//
-//        //mURL.addRequestProperty("AUTHORIZATON", token);
-//        var connection: HttpsURLConnection;
-//
-//        connection = mURL.openConnection() as HttpsURLConnection;
-//
-//        connection.addRequestProperty("Authorization",token);
-//        connection.addRequestProperty("Content-Type","application/json");
-//        //connection.connect();
-//
-//        with(connection){
-//
-//            requestMethod = "POST"
-//
-//            val wr = OutputStreamWriter(outputStream)
-//            wr.write(reqParam)
-//            wr.flush()
-//
-//            println("URL : $url")
-//            println("Response Code : $responseCode")
-//
-//            BufferedReader(InputStreamReader(inputStream)).use{
-//
-//                val response = StringBuffer()
-//
-//                var inputLine = it.readLine()
-//
-//                while (inputLine != null){
-//
-//                    response.append(inputLine)
-//                    inputLine = it.readLine()
-//                }
-//
-//                println("Response: $response")
-//            }
-//        }
-
-
+           //#call to async class
+            SendJsonDataToServer().execute(r.toString());
 
     }
 
+    //ASYNC Task class - POST Request
+    inner class SendJsonDataToServer :
+        AsyncTask<String?, String?, String?>(){
+
+        override fun doInBackground(vararg params: String?): String? {
+            var JsonResponse: String? = null
+            val JsonDATA = params[0]!!
+            var urlConnection: HttpURLConnection? = null
+            var reader: BufferedReader? = null
+
+            try {
+                val url = URL("https://www.ecoders.ca/addUser");
+                urlConnection = url.openConnection() as HttpURLConnection;
+                urlConnection.setDoOutput(true);
+                // is output buffer writter
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.setRequestProperty ("Authorization", "Bearer "+mtoken);
+                //urlConnection.setRequestProperty("token", "token");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                //set headers and method
+                val writer:Writer = BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
+                writer.write(JsonDATA);
+                // json data
+                writer.close();
+                val inputStream:InputStream  = urlConnection.getInputStream();
+                //input stream
+                val buffer: StringBuffer? = null
+                if (inputStream == null) {
+                    // Nothing to do.
+                    return null;
+                }
+                reader = BufferedReader(InputStreamReader(inputStream))
+
+                var inputLine: String = ""
+                while ((inputLine.equals(reader.readLine())) != null) {
+                    buffer?.append(inputLine+"\n")
+                }
+                if (buffer?.length === 0) {
+                    // Stream was empty. No point in parsing.
+                    return null
+                }
+                JsonResponse = buffer.toString()
+
+                //response data
+                Log.i(TAG, JsonResponse)
+                try {
+                    //send to post execute
+                    return JsonResponse
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+                return null
+
+        }catch (ex:Exception){
+
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (ex: Exception) {
+                        Log.e(TAG, "Error closing stream", ex);
+                    }
+                }
+            }
+            return null
+        }
+
+    }
 
 
     }
