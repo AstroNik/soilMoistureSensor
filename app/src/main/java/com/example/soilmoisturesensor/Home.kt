@@ -47,6 +47,9 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
+            R.id.Dashboard->{
+                startActivity(Intent(applicationContext, Home::class.java))
+            }
             R.id.Game->{
                 startActivity(Intent(applicationContext, Game::class.java))
             }
@@ -54,9 +57,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 mAuth.signOut()
                 startActivity(Intent(this, MainActivity::class.java))
                 Toast.makeText(this, "Successfully Log out", Toast.LENGTH_LONG).show()
-            }
-            R.id.SensorDetails->{
-                startActivity(Intent(applicationContext, SensorDetail::class.java))
             }
         }
         drawerlayout.closeDrawer(GravityCompat.START)
