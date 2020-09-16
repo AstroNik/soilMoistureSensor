@@ -140,7 +140,7 @@ class SignUp : AppCompatActivity() {
                 // is output buffer writter
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.setRequestProperty ("Authorization", "Bearer "+mtoken);
+                urlConnection.setRequestProperty ("Authorization", mtoken);
                 //urlConnection.setRequestProperty("token", "token");
                 urlConnection.setRequestProperty("Accept", "application/json");
                 //set headers and method
