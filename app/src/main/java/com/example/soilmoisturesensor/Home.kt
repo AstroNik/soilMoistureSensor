@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -23,6 +24,8 @@ import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -67,13 +70,23 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     muid = mUser.uid
                     mtoken = idToken.toString()
                     postRequestToGetDashboardData();
-
+                    postRequestToGetUniqueDeviceData()
                 } else {
                     Log.d("ERROR Creating Token", task.exception.toString());
                 }
             }
         dashboardItem_list.layoutManager= LinearLayoutManager(this@Home)
         adapter = RecyclerAdapter()
+    }
+
+    private fun postRequestToGetUniqueDeviceData() {
+        val r = JSONObject()
+        val timeZone = TimeZone.getDefault();
+        r.put("timezone", timeZone.id)
+        r.put("uid", muid)
+        r.put("token", mtoken)
+
+        SendJsonDataToSecondEndPoint().execute(r.toString());
     }
 
     private fun postRequestToGetDashboardData() {
@@ -90,11 +103,17 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-            var list = handleJson(result)
-            adapter.submitList(list)
-            dashboardItem_list.adapter = adapter
-            adapter.notifyDataSetChanged();
-            dashboardItem_list.smoothScrollToPosition(0);
+            if (result.equals(null)){
+                val t = Toast.makeText(this@Home,"No devices to display", Toast.LENGTH_LONG)
+                t.setGravity(Gravity.CENTER,0,0)
+                t.show()
+            }else{
+                var list = handleJson(result)
+                adapter.submitList(list)
+                dashboardItem_list.adapter = adapter
+                adapter.notifyDataSetChanged();
+                dashboardItem_list.smoothScrollToPosition(0);
+            }
         }
         override fun doInBackground(vararg params: String?): String? {
             var JsonResponse: String? = null
@@ -104,6 +123,73 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
             try {
                 val url = URL("https://www.ecoders.ca/getSensorData");
+                urlConnection = url.openConnection() as HttpURLConnection;
+                urlConnection.setDoOutput(true);
+                // is output buffer writter
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.setRequestProperty ("Authorization", mtoken);
+                //urlConnection.setRequestProperty("token", "token");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                //set headers and method
+                val writer: Writer = BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
+                writer.write(JsonDATA);
+                // json data
+                writer.close();
+                val inputStream: InputStream = urlConnection.getInputStream();
+                //input stream
+                val buffer: StringBuffer? = null
+                if (inputStream == null) {
+                    // Nothing to do.
+                    return null;
+                }
+                reader = BufferedReader(InputStreamReader(inputStream))
+
+                var inputLine: String? = reader.readLine()
+
+                if (inputLine.equals("null")){
+                    return null
+                }else{
+                    return inputLine
+                }
+
+            }catch (ex:Exception){
+
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (ex: Exception) {
+                        Log.e(TAG, "Error closing stream", ex);
+                    }
+                }
+            }
+            return null
+        }
+
+    }
+
+    inner class SendJsonDataToSecondEndPoint :
+        AsyncTask<String?, String?, String?>(){
+
+//        override fun onPostExecute(result: String?) {
+//            super.onPostExecute(result)
+//            var list = handleJson(result)
+//            adapter.submitList(list)
+//            dashboardItem_list.adapter = adapter
+//            adapter.notifyDataSetChanged();
+//            dashboardItem_list.smoothScrollToPosition(0);
+//        }
+        override fun doInBackground(vararg params: String?): String? {
+            val JsonDATA = params[0]!!
+            var urlConnection: HttpURLConnection? = null
+            var reader: BufferedReader? = null
+
+            try {
+                val url = URL("https://www.ecoders.ca/uniqueDeviceData");
                 urlConnection = url.openConnection() as HttpURLConnection;
                 urlConnection.setDoOutput(true);
                 // is output buffer writter
@@ -181,6 +267,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.Dashboard -> {
+                finish()
                 startActivity(Intent(applicationContext, Home::class.java))
             }
             R.id.Game -> {
