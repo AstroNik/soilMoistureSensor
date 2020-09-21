@@ -88,6 +88,14 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     inner class SendJsonDataToServer :
         AsyncTask<String?, String?, String?>(){
 
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+            var list = handleJson(result)
+            adapter.submitList(list)
+            dashboardItem_list.adapter = adapter
+            adapter.notifyDataSetChanged();
+            dashboardItem_list.smoothScrollToPosition(0);
+        }
         override fun doInBackground(vararg params: String?): String? {
             var JsonResponse: String? = null
             val JsonDATA = params[0]!!
@@ -120,9 +128,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
                 var inputLine: String? = reader.readLine()
 
-                var list = handleJson(inputLine)
-                adapter.submitList(list)
-                dashboardItem_list.adapter = adapter
+                return inputLine
+
 
             }catch (ex:Exception){
 
