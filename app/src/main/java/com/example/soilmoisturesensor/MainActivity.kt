@@ -9,8 +9,11 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
+/**
+ * Main activity when the app opens
+ * @author Ehsan kabir
+ */
 class MainActivity : AppCompatActivity() {
-
 
     private lateinit var mAuth:FirebaseAuth
 
@@ -34,8 +37,6 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun register(){
-
         startActivity(Intent(this,SignUp::class.java ))
-
     }
 }

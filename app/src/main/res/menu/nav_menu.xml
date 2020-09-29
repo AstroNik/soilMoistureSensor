@@ -5,37 +5,26 @@
 
         <item
             android:id="@+id/Dashboard"
-            android:title="Dashboard"
             android:icon="@drawable/ic_action_dashboard"
-            />
+            android:title="Dashboard" />
         <item
             android:id="@+id/Notifications"
-            android:title="Notifications"
             android:icon="@drawable/ic_action_notifications"
-            />
+            android:title="Notifications" />
         <item
             android:id="@+id/PlantFinder"
-            android:title="Plant Finder"
             android:icon="@drawable/ic_action_finder"
-            />
+            android:title="Plant Finder" />
 
         <item
             android:id="@+id/PlantDatabase"
-            android:title="Plant Database"
             android:icon="@drawable/ic_action_database"
-            />
-
-        <item
-            android:id="@+id/Game"
-            android:title="Game"
-            android:icon="@drawable/ic_action_game"
-            />
+            android:title="Plant Database" />
 
         <item
             android:id="@+id/Settings"
-            android:title="Settings"
             android:icon="@drawable/ic_action_setting"
-            />
+            android:title="Settings" />
 
     </group>
 
@@ -43,35 +32,28 @@
 
         <item
             android:id="@+id/a"
-            android:title=""
-            />
+            android:title="" />
         <item
             android:id="@+id/b"
-            android:title=""
-            />
+            android:title="" />
         <item
             android:id="@+id/c"
-            android:title=" "
-            />
+            android:title=" " />
         <item
             android:id="@+id/d"
-            android:title=" "
-            />
+            android:title=" " />
         <item
             android:id="@+id/e"
-            android:title=" "
-            />
+            android:title=" " />
 
     </group>
 
-    <item
-        android:title="">
+    <item android:title="">
         <menu>
             <item
                 android:id="@+id/Logout"
-                android:title="Sign Out"
                 android:icon="@drawable/ic_action_logout"
-                />
+                android:title="Sign Out" />
         </menu>
     </item>
 

@@ -11,6 +11,10 @@ import kotlinx.android.synthetic.main.activity_sign_in.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.activity_sign_up.cancel
 
+/**
+ * Sign in activity
+ * @author Ehsan kabir
+ */
 class SignIn : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth
@@ -22,9 +26,8 @@ class SignIn : AppCompatActivity() {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance()
 
-        login.setOnClickListener(View.OnClickListener { view-> signIn()
-
-            //Save the data in the database, display a message that account has been created
+        login.setOnClickListener(View.OnClickListener {
+                view-> signIn()
         })
 
         goBack.setOnClickListener{

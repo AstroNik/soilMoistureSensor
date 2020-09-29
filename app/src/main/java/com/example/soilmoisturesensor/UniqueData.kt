@@ -1,3 +1,11 @@
 package com.example.soilmoisturesensor
 
-data class UniqueData (val deviceId:Int,val dateTime:String,val soilMoisturePercent: Int)
+/**
+ * Data class for unique data
+ * @author Ehsan kabir
+ */
+data class UniqueData(
+    val deviceId: Int,
+    val dateTime: String,
+    val soilMoisturePercent: Int
+)

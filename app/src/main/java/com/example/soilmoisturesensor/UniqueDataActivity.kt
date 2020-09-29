@@ -14,7 +14,6 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_unique_data.*
@@ -144,21 +143,15 @@ class UniqueDataActivity : AppCompatActivity() {
                 val url = URL("https://www.ecoders.ca/specificDate");
                 urlConnection = url.openConnection() as HttpURLConnection;
                 urlConnection.setDoOutput(true);
-                // is output buffer writter
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setRequestProperty("Content-Type", "application/json");
                 urlConnection.setRequestProperty("Accept", "application/json");
-                //set headers and method
                 val writer: Writer =
                     BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
                 writer.write(JsonDATA);
-                // json data
                 writer.close();
                 val inputStream: InputStream = urlConnection.getInputStream();
-                //input stream
-                val buffer: StringBuffer? = null
                 if (inputStream == null) {
-                    // Nothing to do.
                     return null;
                 }
                 reader = BufferedReader(InputStreamReader(inputStream))
@@ -171,7 +164,6 @@ class UniqueDataActivity : AppCompatActivity() {
                     return inputLine
                 }
             } catch (ex: Exception) {
-
             } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -209,15 +201,19 @@ class UniqueDataActivity : AppCompatActivity() {
             x++
         }
         val barDataSet = BarDataSet(barEntry, "Moisture Percentages")
-        barDataSet.colors = ColorTemplate.createColors(ColorTemplate.JOYFUL_COLORS)
+        barDataSet.colors = ColorTemplate.createColors(ColorTemplate.LIBERTY_COLORS)
         barDataSet.valueTextColor = Color.BLACK
         barDataSet.valueTextSize = 16f
 
         val barData = BarData(barDataSet)
+        barData.setBarWidth(0.1f); // set custom bar width
 
         barChart.setFitBars(true)
         barChart.setDragEnabled(true)
         barChart.setVisibleXRangeMaximum(3f)
+
+        barChart.setPinchZoom(true);
+
         barChart.getXAxis().position = XAxis.XAxisPosition.BOTTOM
         barChart.getXAxis().mAxisMaximum = 5f
         barChart.getXAxis().isGranularityEnabled = true
@@ -309,7 +305,7 @@ private fun handleJsonforFirstEndPoint(jsonString: String?): ArrayList<SensorDat
 fun formatDate(date: String): String {
     var deviceDate = date.replace("\\..*".toRegex(), "")
     deviceDate = deviceDate.replace("T".toRegex(), " ")
-    deviceDate = deviceDate.toDate().formatTo("hh.mm")
+    deviceDate = deviceDate.toDate().formatTo("HH.mm")
     return deviceDate
 }
 

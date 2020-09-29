@@ -64,6 +64,7 @@
                 android:text="Date: 27/07/2020"
                 android:textSize="14dp"
                 android:textStyle="bold" />
+
             <Space
                 android:layout_width="220dp"
                 android:layout_height="match_parent" />

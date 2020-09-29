@@ -17,6 +17,9 @@ import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * @author Manpreet sandhu
+ */
 class SignUp : AppCompatActivity() {
 
     private lateinit var mAuth:FirebaseAuth

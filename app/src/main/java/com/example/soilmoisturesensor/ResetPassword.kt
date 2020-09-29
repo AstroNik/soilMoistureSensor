@@ -7,6 +7,10 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_reset_password.*
 
+/**
+ * Activity to reset account password
+ * @author Ehsan Kabir
+ */
 class ResetPassword : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth

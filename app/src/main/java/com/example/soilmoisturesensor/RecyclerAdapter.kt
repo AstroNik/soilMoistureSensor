@@ -12,6 +12,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+/**
+ * Recycler adapter which binds the data with the cards and dislay in the recycler view
+ * @author Ehsan kabir
+ */
 class RecyclerAdapter(private val listener: onItemClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
