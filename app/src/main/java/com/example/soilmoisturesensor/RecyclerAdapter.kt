@@ -8,12 +8,12 @@ import kotlinx.android.synthetic.main.dashboard_data_card.view.*
 import kotlinx.android.synthetic.main.dashboard_data_card.view.textView_deviceName
 import kotlinx.android.synthetic.main.dashboard_data_card.view.textView_moistureLevel
 import kotlinx.android.synthetic.main.dashboard_data_card.view.textView_updateTime
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RecyclerAdapter(private val listener: onItemClickListener) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: ArrayList<SensorData> = ArrayList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -38,7 +38,8 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         items = list
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
         val deviceName = itemView.textView_deviceName
         val dateTime = itemView.textView_updateTime
         val soilMoisturePercent = itemView.textView_moistureLevel
@@ -46,11 +47,22 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val batteryLevel = itemView.textView_batteryLevel
 
         fun bind(sensorData: SensorData) {
-            deviceName.text = "Device name: " + sensorData.deviceName
+//            deviceName.text = "Device name: " + sensorData.deviceName
             dateTime.text = "Last updated: " + formatDate(sensorData.dateTime)
             soilMoisturePercent.text = sensorData.soilMoisturePercent.toString()
             deviceId.text = "ID: " + sensorData.deviceId.toString()
             batteryLevel.text = sensorData.battery.toString()
+        }
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(position)
+            }
         }
 
         fun formatDate(date: String): String {
@@ -60,7 +72,10 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             return deviceDate
         }
 
-        fun String.toDate(dateFormat: String = "yyyy-MM-dd HH:mm:ss", timeZone: TimeZone = TimeZone.getTimeZone("UTC")): Date {
+        fun String.toDate(
+            dateFormat: String = "yyyy-MM-dd HH:mm:ss",
+            timeZone: TimeZone = TimeZone.getTimeZone("UTC")
+        ): Date {
             val parser = SimpleDateFormat(dateFormat, Locale.getDefault())
             parser.timeZone = timeZone
             return parser.parse(this)
@@ -71,5 +86,9 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             formatter.timeZone = timeZone
             return formatter.format(this)
         }
+    }
+
+    interface onItemClickListener {
+        fun onItemClick(position: Int)
     }
 }

@@ -1,13 +1,11 @@
 package com.example.soilmoisturesensor
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +17,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.content_main.*
 import org.json.JSONArray
-import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
@@ -28,12 +25,15 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+    RecyclerAdapter.onItemClickListener {
 
     private lateinit var drawerlayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     private lateinit var toolbar: Toolbar
     private lateinit var adapter: RecyclerAdapter
+    private lateinit var intentForUnique: Intent
+
     var muid = ""
     var mtoken = ""
     private val TAG = "";
@@ -43,6 +43,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        intentForUnique = Intent(this@Home, UniqueDataActivity::class.java)
 
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -75,8 +77,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     Log.d("ERROR Creating Token", task.exception.toString());
                 }
             }
-        dashboardItem_list.layoutManager= LinearLayoutManager(this@Home)
-        adapter = RecyclerAdapter()
+        dashboardItem_list.layoutManager = LinearLayoutManager(this@Home)
+        adapter = RecyclerAdapter(this)
     }
 
     private fun postRequestToGetUniqueDeviceData() {
@@ -85,7 +87,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         r.put("timezone", timeZone.id)
         r.put("uid", muid)
         r.put("token", mtoken)
-
         SendJsonDataToSecondEndPoint().execute(r.toString());
     }
 
@@ -93,21 +94,21 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         val r = JSONObject()
         r.put("uid", muid)
         r.put("token", mtoken)
-
         //#call to async class
         SendJsonDataToServer().execute(r.toString());
     }
 
     inner class SendJsonDataToServer :
-        AsyncTask<String?, String?, String?>(){
+        AsyncTask<String?, String?, String?>() {
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-            if (result.equals(null)){
-                val t = Toast.makeText(this@Home,"No devices to display", Toast.LENGTH_LONG)
-                t.setGravity(Gravity.CENTER,0,0)
+            if (result.equals(null)) {
+                val t = Toast.makeText(this@Home, "No devices to display", Toast.LENGTH_LONG)
+                t.setGravity(Gravity.CENTER, 0, 0)
                 t.show()
-            }else{
+            } else {
+                intentForUnique.putExtra("FirstEndpointData", result)
                 var list = handleJson(result)
                 adapter.submitList(list)
                 dashboardItem_list.adapter = adapter
@@ -115,8 +116,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 dashboardItem_list.smoothScrollToPosition(0);
             }
         }
+
         override fun doInBackground(vararg params: String?): String? {
-            var JsonResponse: String? = null
             val JsonDATA = params[0]!!
             var urlConnection: HttpURLConnection? = null
             var reader: BufferedReader? = null
@@ -128,11 +129,12 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 // is output buffer writter
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.setRequestProperty ("Authorization", mtoken);
+                urlConnection.setRequestProperty("Authorization", mtoken);
                 //urlConnection.setRequestProperty("token", "token");
                 urlConnection.setRequestProperty("Accept", "application/json");
                 //set headers and method
-                val writer: Writer = BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
+                val writer: Writer =
+                    BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
                 writer.write(JsonDATA);
                 // json data
                 writer.close();
@@ -147,13 +149,13 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
                 var inputLine: String? = reader.readLine()
 
-                if (inputLine.equals("null")){
+                if (inputLine.equals("null")) {
                     return null
-                }else{
+                } else {
                     return inputLine
                 }
 
-            }catch (ex:Exception){
+            } catch (ex: Exception) {
 
             } finally {
                 if (urlConnection != null) {
@@ -169,20 +171,16 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             }
             return null
         }
-
     }
 
     inner class SendJsonDataToSecondEndPoint :
-        AsyncTask<String?, String?, String?>(){
+        AsyncTask<String?, String?, String?>() {
 
-//        override fun onPostExecute(result: String?) {
-//            super.onPostExecute(result)
-//            var list = handleJson(result)
-//            adapter.submitList(list)
-//            dashboardItem_list.adapter = adapter
-//            adapter.notifyDataSetChanged();
-//            dashboardItem_list.smoothScrollToPosition(0);
-//        }
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+            intentForUnique.putExtra("SecondEndpointData", result)
+        }
+
         override fun doInBackground(vararg params: String?): String? {
             val JsonDATA = params[0]!!
             var urlConnection: HttpURLConnection? = null
@@ -195,11 +193,12 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 // is output buffer writter
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.setRequestProperty ("Authorization", mtoken);
+                urlConnection.setRequestProperty("Authorization", mtoken);
                 //urlConnection.setRequestProperty("token", "token");
                 urlConnection.setRequestProperty("Accept", "application/json");
                 //set headers and method
-                val writer: Writer = BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
+                val writer: Writer =
+                    BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
                 writer.write(JsonDATA);
                 // json data
                 writer.close();
@@ -214,10 +213,12 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
                 var inputLine: String? = reader.readLine()
 
-                return inputLine
-
-
-            }catch (ex:Exception){
+                if (inputLine.equals("null")) {
+                    return null
+                } else {
+                    return inputLine
+                }
+            } catch (ex: Exception) {
 
             } finally {
                 if (urlConnection != null) {
@@ -236,19 +237,17 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
     }
 
-    private fun handleJson(jsonString: String?) : ArrayList<SensorData> {
+    private fun handleJson(jsonString: String?): ArrayList<SensorData> {
 
         val jsonArray = JSONArray(jsonString)
-
         val list = ArrayList<SensorData>()
-
         var x = 0
         while (x < jsonArray.length()) {
             val jsonObject = jsonArray.getJSONObject(x)
             list.add(
                 SensorData(
                     jsonObject.getInt("deviceId"),
-                    jsonObject.getString("deviceName"),
+//                    jsonObject.getString("deviceName"),
                     jsonObject.getInt("battery"),
                     jsonObject.getString("dateTime"),
                     jsonObject.getInt("airValue"),
@@ -260,7 +259,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             x++
         }
         return list
-
     }
 
 
@@ -281,5 +279,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         }
         drawerlayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onItemClick(position: Int) {
+        intentForUnique.putExtra("itemClicked", position)
+        startActivity(intentForUnique)
     }
 }
