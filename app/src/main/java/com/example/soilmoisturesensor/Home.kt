@@ -100,6 +100,11 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 startActivity(Intent(this, MainActivity::class.java))
                 Toast.makeText(this, "Successfully Log out", Toast.LENGTH_LONG).show()
             }
+
+            R.id.Settings->{
+                finish()
+                startActivity(Intent(applicationContext, Settings::class.java))
+            }
         }
         drawerlayout.closeDrawer(GravityCompat.START)
         return true

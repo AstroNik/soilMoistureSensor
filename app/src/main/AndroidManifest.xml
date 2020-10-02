@@ -13,13 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UniqueDataActivity"></activity>
+        <activity android:name=".Settings"></activity>
+        <activity android:name=".UniqueDataActivity" />
         <activity android:name=".ResetPassword" />
         <activity android:name=".SignIn" />
-        <activity android:name=".Game" />
         <activity
             android:name=".Home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SignUp" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -28,7 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
