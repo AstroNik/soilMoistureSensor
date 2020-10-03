@@ -9,7 +9,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class   MainActivity : AppCompatActivity() {
 
     // Initialize Firebase Auth
     val mAuth = FirebaseAuth.getInstance()

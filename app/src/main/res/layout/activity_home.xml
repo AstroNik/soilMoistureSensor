@@ -16,7 +16,7 @@
         android:layout_marginEnd="34dp"
         android:layout_marginBottom="119dp"
         app:layout_constraintBottom_toTopOf="@+id/imageButton4"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonEndPoint"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/acc_setup" />
@@ -47,7 +47,7 @@
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/imageButtonEndPoint"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="122dp"
@@ -93,7 +93,7 @@
         app:layout_constraintBottom_toTopOf="@+id/imageButton8"
         app:layout_constraintEnd_toStartOf="@+id/imageButton6"
         app:layout_constraintStart_toEndOf="@+id/imageButton4"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton2"
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonEndPoint"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
     <ImageButton
@@ -117,7 +117,7 @@
         android:layout_marginBottom="119dp"
         app:layout_constraintBottom_toTopOf="@+id/imageButton6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton2"
+        app:layout_constraintStart_toEndOf="@+id/imageButtonEndPoint"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
