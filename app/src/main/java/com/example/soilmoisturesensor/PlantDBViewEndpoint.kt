@@ -29,18 +29,20 @@ class PlantDBViewEndpoint : AppCompatActivity() {
         mtoken = intg.getStringExtra("token")
 
         txt11 = txt1.text.toString()
-
+        var plantTxtData = plantTxt.text
+            txt1.text = ""
+            txt2.text = ""
+            txt3.text = ""
+            txt4.text = ""
+            txt5.text = ""
+            txt6.text = ""
+            txt7.text = ""
+            txt8.text = ""
+            txt9.text = ""
         btn.setOnClickListener{
-//            txt1.text = ""
-//            txt2.text = ""
-//            txt3.text = ""
-//            txt4.text = ""
-//            txt6.text = ""
-//            txt7.text = ""
-//            txt8.text = ""
-//            txt9.text = ""
 
-            if(plantTxt.text.isEmpty()){
+           plantTxtData.trim()
+            if(plantTxtData.isEmpty()){
 
                 Toast.makeText(this,"Warning: Enter the Plant Name",Toast.LENGTH_LONG).show()
             }
@@ -119,6 +121,7 @@ class PlantDBViewEndpoint : AppCompatActivity() {
                 this@PlantDBViewEndpoint.txt2.text = "Common Name: "+out7[5].replace("\"", "")
                 this@PlantDBViewEndpoint.txt3.text = "Plant Type: "+out7[7].replace("\"", "")
                 this@PlantDBViewEndpoint.txt4.text = "Mature Size: "+out7[9].replace("\"", "")
+                this@PlantDBViewEndpoint.txt5.text = "Care: "
                 this@PlantDBViewEndpoint.txt6.text = "Light Level: "+out7[12].replace("\"", "")
                 this@PlantDBViewEndpoint.txt7.text = "Humidity: "+out7[14].replace("\"", "")
                 this@PlantDBViewEndpoint.txt8.text = "Duration: "+out7[16].replace("\"", "")
