@@ -39,6 +39,9 @@ class SignIn : AppCompatActivity() {
         }
     }
 
+    /**
+     * @author Manpreet Sandhu
+     */
     private fun signIn(){
 
         val email = email.text.toString()

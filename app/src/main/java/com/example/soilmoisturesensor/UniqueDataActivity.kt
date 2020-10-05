@@ -1,6 +1,7 @@
 package com.example.soilmoisturesensor
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Build
@@ -28,6 +29,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 private var position: Int = -1
+private lateinit var userDevices : ArrayList<String>
 private lateinit var firstEndPointList: ArrayList<SensorData>
 private lateinit var mAuth: FirebaseAuth
 private val TAG = "";
@@ -40,7 +42,13 @@ class UniqueDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_unique_data)
 
+        backToHome.setOnClickListener {
+            finish()
+            startActivity((Intent(this, Home::class.java)))
+        }
+
         val intent = intent
+        userDevices = intent.getSerializableExtra("userDevices") as ArrayList<String>
         position = intent.getIntExtra("itemClicked", -1)
         val firstEndpointData = intent.getStringExtra("FirstEndpointData")
         val secondEndPointData = intent.getStringExtra("SecondEndpointData")
@@ -181,7 +189,7 @@ class UniqueDataActivity : AppCompatActivity() {
     }
 
     private fun populateValues(firstEndPointList: ArrayList<SensorData>?) {
-//        textView_nameOfDevice.text = "Name: " + firstEndPointList?.get(0)?.deviceName ?: String()
+        textView_nameOfDevice.text = "Name: " + firstEndPointList?.get(0)?.deviceName ?: String()
         textview_lastUpdated.text =
             "Last Updated: " + firstEndPointList?.get(0)?.dateTime?.let { formatDateFull(it) }
     }
@@ -285,7 +293,7 @@ private fun handleJsonforFirstEndPoint(jsonString: String?): ArrayList<SensorDat
             list.add(
                 SensorData(
                     jsonObject.getInt("deviceId"),
-//                    jsonObject.getString("deviceName"),
+                    userDevices[position],
                     jsonObject.getInt("battery"),
                     jsonObject.getString("dateTime"),
                     jsonObject.getInt("airValue"),

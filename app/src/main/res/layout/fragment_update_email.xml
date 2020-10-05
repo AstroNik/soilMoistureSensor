@@ -31,9 +31,8 @@
                 android:layout_marginTop="5dp"
                 android:enabled="true"
                 android:text="Update Email"
-                android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@android:color/white" />
+                android:textColor="?android:attr/colorForeground" />
 
 
         </RelativeLayout>

@@ -14,7 +14,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="45dp" />
+            android:layout_height="25dp" />
 
         <TextView
             android:id="@+id/textView_nameOfDevice"
@@ -25,7 +25,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="20dp" />
+            android:layout_height="17dp" />
 
         <TextView
             android:id="@+id/textview_plantLocation"
@@ -36,7 +36,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="20dp" />
+            android:layout_height="17dp" />
 
         <TextView
             android:id="@+id/textview_lastUpdated"
@@ -47,7 +47,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="20dp" />
+            android:layout_height="17dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -86,6 +86,17 @@
             android:id="@+id/barChart"
             android:layout_width="match_parent"
             android:layout_height="400dp"/>
+
+        <Button
+            android:id="@+id/backToHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/common_google_signin_btn_text_dark_disabled"
+            android:fontFamily="sans-serif-medium"
+            android:text="Back"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     </LinearLayout>
 </RelativeLayout>

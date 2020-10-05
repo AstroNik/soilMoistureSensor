@@ -51,7 +51,7 @@ class RecyclerAdapter(private val listener: onItemClickListener) :
         val batteryLevel = itemView.textView_batteryLevel
 
         fun bind(sensorData: SensorData) {
-//            deviceName.text = "Device name: " + sensorData.deviceName
+            deviceName.text = "Device name: " + sensorData.deviceName
             dateTime.text = "Last updated: " + formatDate(sensorData.dateTime)
             soilMoisturePercent.text = sensorData.soilMoisturePercent.toString()
             deviceId.text = "ID: " + sensorData.deviceId.toString()

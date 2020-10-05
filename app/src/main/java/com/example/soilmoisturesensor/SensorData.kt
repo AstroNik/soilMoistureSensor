@@ -9,7 +9,7 @@ import java.sql.Time
 
 data class SensorData(
     val deviceId: Int,
-//    val deviceName: String,
+    val deviceName: String,
     val battery: Int,
     val dateTime: String,
     val airValue: Int,
