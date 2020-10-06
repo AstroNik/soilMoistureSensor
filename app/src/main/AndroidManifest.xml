@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Settings"></activity>
+        <activity android:name=".PlantDBViewEndpoint"></activity>
+        <activity android:name=".Settings" />
         <activity android:name=".UniqueDataActivity" />
         <activity android:name=".ResetPassword" />
         <activity android:name=".SignIn" />

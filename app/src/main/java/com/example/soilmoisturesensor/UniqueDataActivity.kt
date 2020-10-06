@@ -1,12 +1,15 @@
 package com.example.soilmoisturesensor
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
+import android.view.Gravity
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.github.mikephil.charting.charts.BarChart
@@ -28,6 +31,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 private var position: Int = -1
+private lateinit var userDevices : ArrayList<String>
 private lateinit var firstEndPointList: ArrayList<SensorData>
 private lateinit var mAuth: FirebaseAuth
 private val TAG = "";
@@ -39,8 +43,16 @@ class UniqueDataActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_unique_data)
+        mAuth = FirebaseAuth.getInstance()
+
+        backToHome.setOnClickListener {
+            finish()
+            startActivity((Intent(this, Home::class.java)))
+        }
 
         val intent = intent
+
+        userDevices = intent.getSerializableExtra("userDevices") as ArrayList<String>
         position = intent.getIntExtra("itemClicked", -1)
         val firstEndpointData = intent.getStringExtra("FirstEndpointData")
         val secondEndPointData = intent.getStringExtra("SecondEndpointData")
@@ -61,6 +73,17 @@ class UniqueDataActivity : AppCompatActivity() {
 //            a()
             Toast.makeText(this, "No data to display in chart", Toast.LENGTH_SHORT).show()
         }
+
+
+        btn_changeDeviceName.setOnClickListener {
+            val deviceName = editText_nameOfDevice.text.toString()
+            if (deviceName.isEmpty()){
+                Toast.makeText(this, "Device name can not be blank", Toast.LENGTH_SHORT).show()
+            }else{
+                changeDeviceName(deviceName)
+            }
+        }
+
 
         time_picker.setOnClickListener {
             val dpd = DatePickerDialog(
@@ -93,7 +116,7 @@ class UniqueDataActivity : AppCompatActivity() {
     }
 
     private fun handleDataForSpecificDate(s: String) {
-        mAuth = FirebaseAuth.getInstance()
+
         //Dashboard
         val mUser = FirebaseAuth.getInstance().currentUser
         mUser!!.getIdToken(true)
@@ -108,6 +131,82 @@ class UniqueDataActivity : AppCompatActivity() {
                     Log.d("ERROR Creating Token", task.exception.toString());
                 }
             }
+    }
+
+
+
+    private fun changeDeviceName(s : String) {
+
+        val mUser = FirebaseAuth.getInstance().currentUser
+        mUser!!.getIdToken(true)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val idToken = task.result!!.token
+                    val r = JSONObject()
+                    mtoken = idToken.toString()
+                    r.put("uid", mUser.uid)
+                    r.put("deviceId", firstEndPointList[0].deviceId)
+                    r.put("deviceName", s)
+                    r.put("token", mtoken)
+
+                    SendJsonDataToUpateDeviceName().execute(r.toString());
+                    val t = Toast.makeText(this, "Device Name Changed Successfully", Toast.LENGTH_SHORT)
+                    t.setGravity(Gravity.CENTER, 0, 0)
+                    t.show()
+                } else {
+                    Log.d("ERROR Creating Token", task.exception.toString());
+                }
+            }
+    }
+
+    inner class SendJsonDataToUpateDeviceName :
+        AsyncTask<String?, String?, String?>() {
+
+        override fun doInBackground(vararg params: String?): String? {
+            val JsonDATA = params[0]!!
+            var urlConnection: HttpURLConnection? = null
+            var reader: BufferedReader? = null
+
+            try {
+                val url = URL("https://www.ecoders.ca/updateDeviceName");
+                urlConnection = url.openConnection() as HttpURLConnection;
+                urlConnection.setDoOutput(true);
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.setRequestProperty ("Authorization", mtoken);
+                urlConnection.setRequestProperty("Accept", "application/json");
+                val writer: Writer =
+                    BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
+                writer.write(JsonDATA);
+                writer.close();
+                val inputStream: InputStream = urlConnection.getInputStream();
+                if (inputStream == null) {
+                    return null;
+                }
+                reader = BufferedReader(InputStreamReader(inputStream))
+
+                var inputLine: String? = reader.readLine()
+
+                if (inputLine.equals("null")) {
+                    return null
+                } else {
+                    return inputLine
+                }
+            } catch (ex: Exception) {
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (ex: Exception) {
+                        Log.e(TAG, "Error closing stream", ex);
+                    }
+                }
+            }
+            return null
+        }
     }
 
     private fun postRequestToGetSpecificDateData(s: String) {
@@ -181,7 +280,7 @@ class UniqueDataActivity : AppCompatActivity() {
     }
 
     private fun populateValues(firstEndPointList: ArrayList<SensorData>?) {
-//        textView_nameOfDevice.text = "Name: " + firstEndPointList?.get(0)?.deviceName ?: String()
+        editText_nameOfDevice.setText(firstEndPointList?.get(0)?.deviceName)
         textview_lastUpdated.text =
             "Last Updated: " + firstEndPointList?.get(0)?.dateTime?.let { formatDateFull(it) }
     }
@@ -285,7 +384,7 @@ private fun handleJsonforFirstEndPoint(jsonString: String?): ArrayList<SensorDat
             list.add(
                 SensorData(
                     jsonObject.getInt("deviceId"),
-//                    jsonObject.getString("deviceName"),
+                    userDevices[position],
                     jsonObject.getInt("battery"),
                     jsonObject.getString("dateTime"),
                     jsonObject.getInt("airValue"),

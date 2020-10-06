@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.nav_header.*
 import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -37,18 +40,24 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     private lateinit var toolbar: Toolbar
     private lateinit var adapter: RecyclerAdapter
     private lateinit var intentForUnique: Intent
+    private lateinit var intentForSetting: Intent
     private lateinit var mAuth: FirebaseAuth
 
     var muid = ""
     var mtoken = ""
     private val TAG = "";
+    private var userUid = ""
+    private var userEmail = ""
+    private var userFirstName = ""
+    private var userLastName = ""
+    private var userDevices = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
         intentForUnique = Intent(this@Home, UniqueDataActivity::class.java)
-
+        intentForSetting = Intent(this@Home, Settings::class.java)
 
         mAuth = FirebaseAuth.getInstance()
         val mUser = FirebaseAuth.getInstance().currentUser
@@ -59,6 +68,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     val idToken = task.result!!.token
                     muid = mUser.uid
                     mtoken = idToken.toString()
+                    postRequestToGetUserData()
                     postRequestToGetDashboardData()
                     postRequestToGetUniqueDeviceData()
                 } else {
@@ -73,12 +83,15 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         setSupportActionBar(toolbar)
         drawerlayout = findViewById(R.id.drawerLayout)
         navigationView = findViewById(R.id.nav_view)
+
         val Toggle = ActionBarDrawerToggle(
             this, drawerlayout, toolbar, 0, 0
         )
         drawerlayout.addDrawerListener(Toggle)
         Toggle.syncState()
         navigationView.setNavigationItemSelectedListener(this)
+
+
     }
 
     /**
@@ -95,15 +108,23 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 startActivity(Intent(applicationContext, Home::class.java))
             }
 
+            R.id.PlantDatabase ->{
+                startActivity(Intent(applicationContext, PlantDBViewEndpoint::class.java))
+            }
+
             R.id.Logout -> {
                 mAuth.signOut()
                 startActivity(Intent(this, MainActivity::class.java))
                 Toast.makeText(this, "Successfully Log out", Toast.LENGTH_LONG).show()
             }
 
-            R.id.Settings->{
-                finish()
-                startActivity(Intent(applicationContext, Settings::class.java))
+            R.id.Settings -> {
+                intentForSetting.putExtra("first_name", userFirstName)
+                intentForSetting.putExtra("last_name", userLastName)
+                intentForSetting.putExtra("email", userEmail)
+                intentForSetting.putExtra("id", userUid)
+                intentForSetting.putExtra("token", mtoken)
+                startActivity(intentForSetting)
             }
         }
         drawerlayout.closeDrawer(GravityCompat.START)
@@ -132,6 +153,76 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         r.put("uid", muid)
         r.put("token", mtoken)
         SendJsonDataToSecondEndPoint().execute(r.toString());
+    }
+
+    /**
+     * Method to add uid, token to the header and do a post request
+     * @author Ehsan Kabir
+     */
+    private fun postRequestToGetUserData() {
+        val r = JSONObject()
+        r.put("uid", muid)
+        r.put("token", mtoken)
+        SendJsonDataToGetUserData().execute(r.toString());
+    }
+
+    /**
+     * Inner Class to get User data  by calling our
+     * endpoint "https://www.ecoders.ca/login"
+     *
+     * @author Ehsan Kabir
+     */
+    inner class SendJsonDataToGetUserData :
+        AsyncTask<String?, String?, String?>() {
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+        }
+
+        override fun doInBackground(vararg params: String?): String? {
+            val JsonDATA = params[0]!!
+            var urlConnection: HttpURLConnection? = null
+            var reader: BufferedReader? = null
+            try {
+                val url = URL("https://www.ecoders.ca/login");
+                urlConnection = url.openConnection() as HttpURLConnection;
+                urlConnection.setDoOutput(true);
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.setRequestProperty("Authorization", mtoken);
+                urlConnection.setRequestProperty("Accept", "application/json");
+                val writer: Writer =
+                    BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
+                writer.write(JsonDATA);
+                writer.close();
+                val inputStream: InputStream = urlConnection.getInputStream();
+                if (inputStream == null) {
+                    return null;
+                }
+                reader = BufferedReader(InputStreamReader(inputStream))
+                var inputLine: String? = reader.readLine()
+                if (inputLine.equals("null")) {
+                    return null
+                } else {
+                    handleUserData(inputLine)
+                    return inputLine
+                }
+            } catch (ex: Exception) {
+                Log.e(TAG, "Connection Failed", ex);
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (ex: Exception) {
+                        Log.e(TAG, "Error closing stream", ex);
+                    }
+                }
+            }
+            return null
+        }
     }
 
     /**
@@ -222,6 +313,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 t.show()
             } else {
                 intentForUnique.putExtra("FirstEndpointData", result)
+                intentForUnique.putExtra("userDevices", userDevices)
+
                 var list = handleJson(result)
                 adapter.submitList(list)
                 dashboardItem_list.adapter = adapter
@@ -293,7 +386,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             list.add(
                 SensorData(
                     jsonObject.getInt("deviceId"),
-//                    jsonObject.getString("deviceName"),
+                    userDevices[x],
                     jsonObject.getInt("battery"),
                     jsonObject.getString("dateTime"),
                     jsonObject.getInt("airValue"),
@@ -306,4 +399,39 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         }
         return list
     }
+
+    /**
+     * This converts json String to a Array list
+     * In this case, it is converting the data retrieved from the
+     * endpoint /getSensorData and converting it to an arraylist
+     * of SensorData
+     *
+     * @author Ehsan Kabir
+     */
+    private fun handleUserData(jsonString: String?) {
+        var out1 = jsonString!!.replace("{", "")
+        var out2 = out1.replace("}", "")
+        var out3 = out2.replace("]", "")
+        var out4 = out3.replace(":", ",")
+        var out5 = out4.replace("\"", "")
+        var out6 = out5.replace("\"", "")
+        var out7 = out6.split(",").toTypedArray()
+
+        userUid = out7[1].replace("\"", "")
+        userEmail = out7[3].replace("\"", "")
+        userFirstName = out7[5].replace("\"", "")
+        userLastName = out7[7].replace("\"", "")
+
+
+        var x = 12
+        while (x < out7.size) {
+            userDevices.add(out7[x].replace("\"", ""))
+            x = x + 4
+        }
+
+        val name = navigationView.getHeaderView(0)
+            .findViewById(R.id.textView_dashboard_header_name) as TextView
+        name.text = userFirstName + " " + userLastName
+    }
+
 }
