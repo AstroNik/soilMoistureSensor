@@ -42,6 +42,10 @@ class Settings : AppCompatActivity() {
         id = intent.getStringExtra("id")
         token = intent.getStringExtra("token")
 
+        edit_text_fname.setText(first_name)
+        edit_text_lname.setText(last_name)
+        edit_text_email.setText(email)
+
         val currentUser = auth.currentUser
 
         layoutPassword.visibility = View.VISIBLE

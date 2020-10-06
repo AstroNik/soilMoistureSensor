@@ -78,8 +78,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         dashboardItem_list.layoutManager = LinearLayoutManager(this@Home)
         adapter = RecyclerAdapter(this)
 
-//        val text = findViewById(R.id.textView_dashboard_header_name) as TextView
-//        text.text = userFirstName
 
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -110,8 +108,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 startActivity(Intent(applicationContext, Home::class.java))
             }
 
-            R.id.PlantFinder->{
-                startActivity(Intent(applicationContext,PlantDBViewEndpoint::class.java))
+            R.id.PlantDatabase ->{
+                startActivity(Intent(applicationContext, PlantDBViewEndpoint::class.java))
             }
 
             R.id.Logout -> {
@@ -120,7 +118,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 Toast.makeText(this, "Successfully Log out", Toast.LENGTH_LONG).show()
             }
 
-            R.id.Settings->{
+            R.id.Settings -> {
                 intentForSetting.putExtra("first_name", userFirstName)
                 intentForSetting.putExtra("last_name", userLastName)
                 intentForSetting.putExtra("email", userEmail)
@@ -316,6 +314,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             } else {
                 intentForUnique.putExtra("FirstEndpointData", result)
                 intentForUnique.putExtra("userDevices", userDevices)
+
                 var list = handleJson(result)
                 adapter.submitList(list)
                 dashboardItem_list.adapter = adapter
@@ -409,11 +408,11 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
      *
      * @author Ehsan Kabir
      */
-    private fun handleUserData(jsonString: String?){
-        var out1 = jsonString!!.replace("{","")
-        var out2 = out1.replace("}","")
-        var out3 = out2.replace("]","")
-        var out4 = out3.replace(":",",")
+    private fun handleUserData(jsonString: String?) {
+        var out1 = jsonString!!.replace("{", "")
+        var out2 = out1.replace("}", "")
+        var out3 = out2.replace("]", "")
+        var out4 = out3.replace(":", ",")
         var out5 = out4.replace("\"", "")
         var out6 = out5.replace("\"", "")
         var out7 = out6.split(",").toTypedArray()
@@ -422,14 +421,17 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         userEmail = out7[3].replace("\"", "")
         userFirstName = out7[5].replace("\"", "")
         userLastName = out7[7].replace("\"", "")
-        var x= 12
-        while (x<out7.size){
+
+
+        var x = 12
+        while (x < out7.size) {
             userDevices.add(out7[x].replace("\"", ""))
-            x = x+4
+            x = x + 4
         }
 
-        val name = navigationView.getHeaderView(0).findViewById(R.id.textView_dashboard_header_name) as TextView
-        name.text = userFirstName+ " " +userLastName
+        val name = navigationView.getHeaderView(0)
+            .findViewById(R.id.textView_dashboard_header_name) as TextView
+        name.text = userFirstName + " " + userLastName
     }
 
 }
