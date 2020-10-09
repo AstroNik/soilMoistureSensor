@@ -12,9 +12,9 @@
             android:icon="@drawable/ic_action_notifications"
             android:title="Notifications" />
         <item
-            android:id="@+id/PlantFinder"
+            android:id="@+id/DeviceSetup"
             android:icon="@drawable/ic_action_finder"
-            android:title="Plant Finder" />
+            android:title="Device Setup" />
 
         <item
             android:id="@+id/PlantDatabase"
@@ -42,9 +42,7 @@
         <item
             android:id="@+id/d"
             android:title=" " />
-        <item
-            android:id="@+id/e"
-            android:title=" " />
+
 
     </group>
 

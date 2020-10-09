@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.notification_item.view.*
 
-class NotificationRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NotificationRecyclerViewAdapter(private val listener: onItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: ArrayList<NotificationData> = ArrayList()
 
@@ -32,7 +32,7 @@ class NotificationRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerView.View
         items = list
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),  View.OnClickListener{
         val alert = itemView.text_view_heading
         val message = itemView.text_view_message
         val date = itemView.text_view_time
@@ -42,6 +42,17 @@ class NotificationRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerView.View
             message.text = notificationData.content
             date.text = formatDate(notificationData.dateTime)
         }
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(position)
+            }
+        }
     }
 
     fun formatDate(date: String): String {
@@ -49,6 +60,10 @@ class NotificationRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerView.View
         deviceDate = deviceDate.replace("T".toRegex(), " ")
         deviceDate = deviceDate.toDate().formatTo("dd MMM yyyy h:mm a")
         return deviceDate
+    }
+
+    interface onItemClickListener {
+        fun onItemClick(position: Int)
     }
 }
 
