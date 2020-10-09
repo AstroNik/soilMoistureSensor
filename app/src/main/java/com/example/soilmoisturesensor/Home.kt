@@ -126,6 +126,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 intentForSetting.putExtra("token", mtoken)
                 startActivity(intentForSetting)
             }
+
+            R.id.Notifications -> {
+                startActivity(Intent(this, Notifications::class.java))
+            }
         }
         drawerlayout.closeDrawer(GravityCompat.START)
         return true
