@@ -32,7 +32,6 @@ class PlantDBViewEndpoint : AppCompatActivity() {
 
         backToHome.setOnClickListener{
             finish()
-            startActivity(Intent(this, Home::class.java))
         }
 
         btn.setOnClickListener{

@@ -128,7 +128,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             }
 
             R.id.Notifications -> {
-                startActivity(Intent(this, Notifications::class.java))
+                    startActivity(Intent(this, Notifications::class.java))
             }
         }
         drawerlayout.closeDrawer(GravityCompat.START)

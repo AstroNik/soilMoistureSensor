@@ -4,9 +4,7 @@ import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
-import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.EmailAuthProvider
@@ -14,9 +12,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.activity_settings.edit_text_newPassword
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.fragment_update_password.*
-import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
@@ -52,7 +47,7 @@ class Settings : AppCompatActivity() {
         layoutUpdateEmail.visibility = View.GONE
 
         backToLoginFromemail.setOnClickListener {
-            startActivity(Intent(this, Home::class.java))
+            finish()
         }
 
         button_authenticate.setOnClickListener {
