@@ -162,94 +162,207 @@ class Notifications : AppCompatActivity(), NotificationRecyclerViewAdapter.onIte
 
     override fun onItemClick(position: Int) {
         clickPosition = position
-        postRequestToDeleteNotifications()
-    }
-
-    private fun postRequestToDeleteNotifications() {
-        val r = JSONObject()
-        val notificationID = list[clickPosition].notificationID
-        r.put("notificationID", notificationID)
-        r.put("uid", muid)
-        SendJsonDataToServerTwo().execute(r.toString());
-    }
-
-    inner class SendJsonDataToServerTwo :
-        AsyncTask<String?, String?, String?>() {
-
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-            list.remove(list[clickPosition])
-
-            notificationsRecylerView.layoutManager = LinearLayoutManager(this@Notifications)
-            notification_adapter = NotificationRecyclerViewAdapter(this@Notifications)
-
-            notification_adapter.submitList(list)
-            notificationsRecylerView.adapter = notification_adapter
-
-            if (list.size == 0) {
-                val t =
-                    Toast.makeText(this@Notifications, "No more Notifications", Toast.LENGTH_LONG)
-                t.setGravity(Gravity.CENTER, 0, 0)
-                t.show()
-            }
-
-            notification_adapter.notifyDataSetChanged()
-            notificationsRecylerView.smoothScrollToPosition(0)
-
-
-        }
-
-        override fun doInBackground(vararg params: String?): String? {
-            val JsonDATA = params[0]!!
-            var urlConnection: HttpURLConnection? = null
-            var reader: BufferedReader? = null
-
-            try {
-                val url = URL("https://www.ecoders.ca/updateNotification");
-                urlConnection = url.openConnection() as HttpURLConnection;
-                urlConnection.setDoOutput(true);
-                // is output buffer writter
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.setRequestProperty("Authorization", mtoken);
-                urlConnection.setRequestProperty("Accept", "application/json");
-                //set headers and method
-                val writer: Writer =
-                    BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
-                writer.write(JsonDATA);
-                // json data
-                writer.close();
-                val inputStream: InputStream = urlConnection.getInputStream();
-                //input stream
-                val buffer: StringBuffer? = null
-                if (inputStream == null) {
-                    // Nothing to do.
-                    return null;
-                }
-                reader = BufferedReader(InputStreamReader(inputStream))
-
-                var inputLine = reader.readLine()
-
-                if (inputLine.equals("null")) {
-                    return null
-                } else {
-                    return inputLine
-                }
-            } catch (ex: Exception) {
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (ex: Exception) {
-                        Log.e(TAG, "Error closing stream", ex);
-                    }
-                }
-
-            }
-            return null
-        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    private fun postRequestToDeleteNotifications() {
+//        val r = JSONObject()
+//        val notificationID = list[clickPosition].notificationID
+//        r.put("notificationID", notificationID)
+//        r.put("uid", muid)
+//        SendJsonDataToServerTwo().execute(r.toString());
+//    }
+//
+//    inner class SendJsonDataToServerTwo :
+//        AsyncTask<String?, String?, String?>() {
+//
+//        override fun onPostExecute(result: String?) {
+//            super.onPostExecute(result)
+//            list.remove(list[clickPosition])
+//
+//            notificationsRecylerView.layoutManager = LinearLayoutManager(this@Notifications)
+//            notification_adapter = NotificationRecyclerViewAdapter(this@Notifications)
+//
+//            notification_adapter.submitList(list)
+//            notificationsRecylerView.adapter = notification_adapter
+//
+//            if (list.size == 0) {
+//                val t =
+//                    Toast.makeText(this@Notifications, "No more Notifications", Toast.LENGTH_LONG)
+//                t.setGravity(Gravity.CENTER, 0, 0)
+//                t.show()
+//            }
+//
+//            notification_adapter.notifyDataSetChanged()
+//            notificationsRecylerView.smoothScrollToPosition(0)
+//
+//
+//        }
+//
+//        override fun doInBackground(vararg params: String?): String? {
+//            val JsonDATA = params[0]!!
+//            var urlConnection: HttpURLConnection? = null
+//            var reader: BufferedReader? = null
+//
+//            try {
+//                val url = URL("https://www.ecoders.ca/updateNotification");
+//                urlConnection = url.openConnection() as HttpURLConnection;
+//                urlConnection.setDoOutput(true);
+//                // is output buffer writter
+//                urlConnection.setRequestMethod("POST");
+//                urlConnection.setRequestProperty("Content-Type", "application/json");
+//                urlConnection.setRequestProperty("Authorization", mtoken);
+//                urlConnection.setRequestProperty("Accept", "application/json");
+//                //set headers and method
+//                val writer: Writer =
+//                    BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
+//                writer.write(JsonDATA);
+//                // json data
+//                writer.close();
+//                val inputStream: InputStream = urlConnection.getInputStream();
+//                //input stream
+//                val buffer: StringBuffer? = null
+//                if (inputStream == null) {
+//                    // Nothing to do.
+//                    return null;
+//                }
+//                reader = BufferedReader(InputStreamReader(inputStream))
+//
+//                var inputLine = reader.readLine()
+//
+//                if (inputLine.equals("null")) {
+//                    return null
+//                } else {
+//                    return inputLine
+//                }
+//            } catch (ex: Exception) {
+//            } finally {
+//                if (urlConnection != null) {
+//                    urlConnection.disconnect();
+//                }
+//                if (reader != null) {
+//                    try {
+//                        reader.close();
+//                    } catch (ex: Exception) {
+//                        Log.e(TAG, "Error closing stream", ex);
+//                    }
+//                }
+//
+//            }
+//            return null
+//        }
+//    }
