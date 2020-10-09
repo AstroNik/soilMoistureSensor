@@ -18,6 +18,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 /**
+ * Sign up activity
  * @author Manpreet sandhu
  */
 class SignUp : AppCompatActivity() {
@@ -39,7 +40,6 @@ class SignUp : AppCompatActivity() {
 
         ok.setOnClickListener(View.OnClickListener { view-> register()
 
-            //Save the data in the database, display a message that account has been created
         })
 
         cancel.setOnClickListener{
@@ -48,6 +48,10 @@ class SignUp : AppCompatActivity() {
         }
     }
 
+    /**
+     * SignUp method
+     * @author Manpreet Sandhu
+     */
     private fun register(){
 
         val mName = fullName.text.toString()
@@ -110,7 +114,10 @@ class SignUp : AppCompatActivity() {
     }
 
 
-    //sendDataToServerFunction
+    /**
+     * Method to add uid, token, email, firstname, lastname to the header and do a post request
+     * @author Manpreet Sandhu
+     */
     fun sendDataToServer() {
 
         //JSON OBJECT
@@ -126,7 +133,13 @@ class SignUp : AppCompatActivity() {
 
     }
 
-    //ASYNC Task class - POST Request
+
+    /**
+     * ASYNC Task class - Inner Class to add user to DB after signup
+     * endpoint https://www.ecoders.ca/addUser
+     *
+     * @author Manpreet Sandhu
+     */
     inner class SendJsonDataToServer :
         AsyncTask<String?, String?, String?>(){
 

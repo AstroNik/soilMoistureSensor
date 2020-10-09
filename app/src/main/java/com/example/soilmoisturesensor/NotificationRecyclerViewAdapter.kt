@@ -6,15 +6,30 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.notification_item.view.*
 
+/**
+ * Recycler adapter which binds the data with the cards, dislay and remove items by swipingin the recycler view
+ * @author Manpreet Sandhu
+ */
 class NotificationRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: ArrayList<NotificationData> = ArrayList()
+    private var removedPosition:Int = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.notification_item, parent, false)
         )
     }
+
+    fun removeItem(viewHolder: RecyclerView.ViewHolder){
+
+        removedPosition = viewHolder.adapterPosition
+
+        items.removeAt(viewHolder.adapterPosition)
+        notifyItemRemoved(viewHolder.adapterPosition)
+
+    }
+
 
     override fun getItemCount(): Int {
         return items.size
@@ -50,6 +65,8 @@ class NotificationRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerView.View
         deviceDate = deviceDate.toDate().formatTo("dd MMM yyyy h:mm a")
         return deviceDate
     }
+
+
 }
 
 

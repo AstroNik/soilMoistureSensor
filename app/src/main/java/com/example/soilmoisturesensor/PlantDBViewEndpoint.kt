@@ -13,6 +13,10 @@ import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * PlantDBViewPoint activity which is basically the PlantDB Search Page of the Application
+ * @author Manpreet Sandhu
+ */
 class PlantDBViewEndpoint : AppCompatActivity() {
     private val TAG =""
 
@@ -54,7 +58,10 @@ class PlantDBViewEndpoint : AppCompatActivity() {
 
     }
 
-
+    /**
+     * Method to add plant name,token to the header and do a post request
+     * @author Manpreet Sandhu
+     */
     private fun postRequestToGetPlantData() {
         val r = JSONObject()
         r.put("plantName", plantTxt.text.trim())
@@ -62,6 +69,12 @@ class PlantDBViewEndpoint : AppCompatActivity() {
         SendJsonDataToServer().execute(r.toString());
     }
 
+    /**
+     * Inner Class to get Plant data  by calling our
+     * endpoint https://www.ecoders.ca/getPlantData
+     *
+     * @author Manpreet Sandhu
+     */
     inner class SendJsonDataToServer :
         AsyncTask<String?, String?, String?>(){
 
@@ -98,15 +111,13 @@ class PlantDBViewEndpoint : AppCompatActivity() {
                 reader = BufferedReader(InputStreamReader(inputStream))
 
                 inputLine = reader.readLine()
-                //this@PlantDBViewEndpoint.txt6.text = "bbjbhj"
                 var out = inputLine.toString()
                 var out1 = out.replace("{","")
                 var out2 = out1.replace("}","")
-                //var out3 = out2.replace("care","")
                 var out4 = out2.replace(":",",")
                 var out7 = out4.split(",").toTypedArray()
 
-                // var list = handleJson(inputLine)
+                //setting the Plant values to the textviews
                 this@PlantDBViewEndpoint.txt1.text = "Botanical Name: "+out7[3].replace("\"", "")
                 this@PlantDBViewEndpoint.txt2.text = "Common Name: "+out7[5].replace("\"", "")
                 this@PlantDBViewEndpoint.txt3.text = "Plant Type: "+out7[7].replace("\"", "")

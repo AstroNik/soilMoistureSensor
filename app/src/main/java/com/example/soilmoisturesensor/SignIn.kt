@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_sign_up.cancel
 
 /**
  * Sign in activity
- * @author Ehsan kabir
+ * @author Manpreet Sandhu
  */
 class SignIn : AppCompatActivity() {
 
@@ -40,6 +40,7 @@ class SignIn : AppCompatActivity() {
     }
 
     /**
+     * SignIn method
      * @author Manpreet Sandhu
      */
     private fun signIn(){
