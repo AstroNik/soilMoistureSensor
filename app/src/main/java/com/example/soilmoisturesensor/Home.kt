@@ -56,6 +56,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        progressbarDashboard.visibility = View.VISIBLE
+
         intentForUnique = Intent(this@Home, UniqueDataActivity::class.java)
         intentForSetting = Intent(this@Home, Settings::class.java)
 
@@ -320,6 +322,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 intentForUnique.putExtra("userDevices", userDevices)
 
                 var list = handleJson(result)
+
+                progressbarDashboard.visibility = View.GONE
+                dashboardLayout.visibility = View.VISIBLE
+                
                 adapter.submitList(list)
                 dashboardItem_list.adapter = adapter
                 adapter.notifyDataSetChanged();
