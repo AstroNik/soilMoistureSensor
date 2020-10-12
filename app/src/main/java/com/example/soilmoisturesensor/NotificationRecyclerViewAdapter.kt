@@ -53,7 +53,7 @@ class NotificationRecyclerViewAdapter() : RecyclerView.Adapter<RecyclerView.View
         val date = itemView.text_view_time
 
         fun bind(notificationData: NotificationData) {
-            alert.text = notificationData.title
+            alert.text = notificationData.deviceName
             message.text = notificationData.content
             date.text = formatDate(notificationData.dateTime)
         }

@@ -13,6 +13,8 @@ data class NotificationData (
     var dateTime:String,
     var title:String,
     var content:String,
-    var isRead:Boolean
+    var isRead:Boolean,
+    var deviceName : String
+
 
 )

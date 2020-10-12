@@ -51,6 +51,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     private var userFirstName = ""
     private var userLastName = ""
     private var userDevices = ArrayList<String>()
+    private var deviceId = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,7 +131,13 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             }
 
             R.id.Notifications -> {
-                    startActivity(Intent(this, Notifications::class.java))
+
+                val intent = Intent(this@Home, Notifications::class.java)
+                intent.putExtra("DeviceName", userDevices)
+
+                intent.putExtra("DeviceId", deviceId)
+                startActivity(intent)
+
             }
         }
         drawerlayout.closeDrawer(GravityCompat.START)
@@ -438,6 +445,13 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             userDevices.add(out7[x].replace("\"", ""))
             x = x + 4
         }
+
+        var y = 10
+        while (y < out7.size) {
+            deviceId.add(out7[y].replace("\"", ""))
+            y = y + 4
+        }
+
 
         val name = navigationView.getHeaderView(0)
             .findViewById(R.id.textView_dashboard_header_name) as TextView
