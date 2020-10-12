@@ -42,6 +42,10 @@ class Notifications : AppCompatActivity() {
     private var swipeBackground: ColorDrawable = ColorDrawable(Color.parseColor("#FF0000"))
     private var swipePosition = -1
 
+    private var userDevices = ArrayList<String>()
+    private var deviceId = ArrayList<String>()
+    private var devNames = ArrayList<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notifications)
@@ -202,7 +206,29 @@ class Notifications : AppCompatActivity() {
                 t.setGravity(Gravity.CENTER, 0, 0)
                 t.show()
             } else {
-                list = handleJson(result)
+                list = handleJson1(result)
+
+                //get intent object, data from intent
+                val intent = getIntent()
+                userDevices = intent.getStringArrayListExtra("DeviceName")
+                deviceId = intent.getStringArrayListExtra("DeviceId")
+
+                //get the deviceName for the available deviceId's
+                var index = 0
+
+
+                for (j in deviceId){
+                    for(i in list){
+                        val a = i.deviceID.toString()
+                        val b = i.deviceID
+                        if (j.equals(i.deviceID.toString()))
+                            devNames.add(userDevices.get(index))
+                    }
+                    index++
+                }
+
+                list = handleJson2(result)
+
 
                 notificationsRecylerView.layoutManager = LinearLayoutManager(this@Notifications)
                 notification_adapter = NotificationRecyclerViewAdapter()
@@ -269,15 +295,16 @@ class Notifications : AppCompatActivity() {
         }
     }
 
+
     /**
-     * This converts json String to a Array list
-     * In this case, it is converting the data retrieved from the
-     * endpoint /getNoficationData and converting it to an arraylist
-     * of SensorData
-     *
-     * @author Manpreet Sandhu
-     */
-    private fun handleJson(jsonString: String?): ArrayList<NotificationData> {
+    //     * This converts json String to a Array list
+    //     * In this case, it is converting the data retrieved from the
+    //     * endpoint /getNoficationData and converting it to an arraylist
+    //     * of SensorData
+    //     *
+    //     * @author Manpreet Sandhu
+    //     */
+    private fun handleJson1(jsonString: String?): ArrayList<NotificationData> {
         val jsonArray = JSONArray(jsonString)
         val list = ArrayList<NotificationData>()
         var x = 0
@@ -290,7 +317,39 @@ class Notifications : AppCompatActivity() {
                     jsonObject.getString("dateTime"),
                     jsonObject.getString("title"),
                     jsonObject.getString("content"),
-                    jsonObject.getBoolean("isRead")
+                    jsonObject.getBoolean("isRead"),
+                    ""
+
+                )
+            )
+            x++
+        }
+        return list
+    }
+
+    /**
+     * This converts json String to a Array list
+     * In this case, it is converting the data retrieved from the
+     * endpoint /getNoficationData and converting it to an arraylist
+     * of SensorData
+     *
+     * @author Manpreet Sandhu
+     */
+    private fun handleJson2(jsonString: String?): ArrayList<NotificationData> {
+        val jsonArray = JSONArray(jsonString)
+        val list = ArrayList<NotificationData>()
+        var x = 0
+        while (x < jsonArray.length()) {
+            val jsonObject = jsonArray.getJSONObject(x)
+            list.add(
+                NotificationData(
+                    jsonObject.getInt("notificationId"),
+                    jsonObject.getInt("deviceId"),
+                    jsonObject.getString("dateTime"),
+                    jsonObject.getString("title"),
+                    jsonObject.getString("content"),
+                    jsonObject.getBoolean("isRead"),
+                    devNames[x]
                 )
             )
             x++
@@ -305,8 +364,8 @@ class Notifications : AppCompatActivity() {
      */
     private fun postRequestToDeleteNotifications() {
         val r = JSONObject()
-        val notificationID = list[swipePosition].notificationID
-        r.put("notificationID", notificationID)
+        val deviceID = list[swipePosition].deviceID
+        r.put("deviceID", deviceID)
         r.put("uid", muid)
         SendJsonDataToServerTwo().execute(r.toString());
     }
