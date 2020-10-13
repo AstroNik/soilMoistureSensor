@@ -1,6 +1,7 @@
 package com.example.soilmoisturesensor
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.AsyncTask
@@ -10,8 +11,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.util.Log
 import android.view.Gravity
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -34,6 +37,7 @@ private var position: Int = -1
 private lateinit var userDevices : ArrayList<String>
 private lateinit var firstEndPointList: ArrayList<SensorData>
 private lateinit var mAuth: FirebaseAuth
+private lateinit var deviceName : String
 private val TAG = "";
 var muid = ""
 var mtoken = ""
@@ -43,6 +47,7 @@ class UniqueDataActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_unique_data)
+
         mAuth = FirebaseAuth.getInstance()
 
         backToHome.setOnClickListener {
@@ -50,13 +55,14 @@ class UniqueDataActivity : AppCompatActivity() {
             startActivity((Intent(this, Home::class.java)))
         }
 
-        val intent = intent
+//        val intent = intent
 
         userDevices = intent.getSerializableExtra("userDevices") as ArrayList<String>
         position = intent.getIntExtra("itemClicked", -1)
         val firstEndpointData = intent.getStringExtra("FirstEndpointData")
         val secondEndPointData = intent.getStringExtra("SecondEndpointData")
         firstEndPointList = handleJsonforFirstEndPoint(firstEndpointData)!!
+        deviceName = firstEndPointList?.get(0)?.deviceName.toString()
         populateValues(firstEndPointList)
 
         val c = Calendar.getInstance()
@@ -80,6 +86,7 @@ class UniqueDataActivity : AppCompatActivity() {
             if (deviceName.isEmpty()){
                 Toast.makeText(this, "Device name can not be blank", Toast.LENGTH_SHORT).show()
             }else{
+                closeKeyBoard()
                 changeDeviceName(deviceName)
             }
         }
@@ -150,9 +157,11 @@ class UniqueDataActivity : AppCompatActivity() {
                     r.put("token", mtoken)
 
                     SendJsonDataToUpateDeviceName().execute(r.toString());
+                    this.setTitle("Device Details for "+ deviceName)
                     val t = Toast.makeText(this, "Device Name Changed Successfully", Toast.LENGTH_SHORT)
                     t.setGravity(Gravity.CENTER, 0, 0)
                     t.show()
+                    startActivity(Intent(this, Home::class.java))
                 } else {
                     Log.d("ERROR Creating Token", task.exception.toString());
                 }
@@ -278,11 +287,20 @@ class UniqueDataActivity : AppCompatActivity() {
             return null
         }
     }
+    private fun closeKeyBoard() {
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
 
     private fun populateValues(firstEndPointList: ArrayList<SensorData>?) {
-        editText_nameOfDevice.setText(firstEndPointList?.get(0)?.deviceName)
+
+        editText_nameOfDevice.setText(deviceName)
         textview_lastUpdated.text =
             "Last Updated: " + firstEndPointList?.get(0)?.dateTime?.let { formatDateFull(it) }
+        this.setTitle("Device Details for "+ deviceName)
     }
 
     private fun showbarChart(list: ArrayList<UniqueData>) {
@@ -429,3 +447,4 @@ fun formatDateFull(date: String): String {
     deviceDate = deviceDate.toDate().formatTo("dd MMM yyyy h:mm a")
     return deviceDate
 }
+

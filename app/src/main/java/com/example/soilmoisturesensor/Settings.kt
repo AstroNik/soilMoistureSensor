@@ -1,11 +1,13 @@
 package com.example.soilmoisturesensor
 
+import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -29,6 +31,8 @@ class Settings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
+        this.setTitle("Settings")
 
         val intent = intent
         first_name = intent.getStringExtra("first_name")
@@ -66,6 +70,7 @@ class Settings : AppCompatActivity() {
                         progressbar.visibility = View.GONE
                         when {
                             task.isSuccessful -> {
+                                closeKeyBoard()
                                 layoutPassword.visibility = View.GONE
                                 layoutUpdateEmail.visibility = View.VISIBLE
                             }
@@ -81,6 +86,7 @@ class Settings : AppCompatActivity() {
             }
 
             button_update.setOnClickListener { view ->
+                closeKeyBoard()
                 val email = edit_text_email.text.toString()
                 val firstName = edit_text_fname.text.toString()
                 val lastName = edit_text_lname.text.toString()
@@ -162,6 +168,13 @@ class Settings : AppCompatActivity() {
                         }
                 }
             }
+        }
+    }
+    private fun closeKeyBoard() {
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
 

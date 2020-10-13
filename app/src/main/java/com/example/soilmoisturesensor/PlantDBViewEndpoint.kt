@@ -1,11 +1,14 @@
 package com.example.soilmoisturesensor
 
+import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_plant_d_b_view_endpoint.*
 import org.json.JSONObject
@@ -27,6 +30,7 @@ class PlantDBViewEndpoint : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_plant_d_b_view_endpoint)
 
+        this.setTitle("Plant database")
 
         val mUser = FirebaseAuth.getInstance().currentUser
 
@@ -44,6 +48,7 @@ class PlantDBViewEndpoint : AppCompatActivity() {
                 mUser!!.getIdToken(true)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
+                            closeKeyBoard()
                             val idToken = task.result!!.token
                             mtoken = idToken.toString()
                             postRequestToGetPlantData()
@@ -55,6 +60,13 @@ class PlantDBViewEndpoint : AppCompatActivity() {
             }
         }
 
+    }
+    private fun closeKeyBoard() {
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     /**

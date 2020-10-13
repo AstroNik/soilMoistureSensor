@@ -50,6 +50,8 @@ class Notifications : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notifications)
 
+        this.setTitle("Notifications")
+
         mAuth = FirebaseAuth.getInstance()
         val mUser = FirebaseAuth.getInstance().currentUser
 
