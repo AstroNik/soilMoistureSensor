@@ -1,125 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UniqueDataActivity"
-    android:background="@drawable/ecodersbackimg">
+    android:background="@drawable/ecodersbackimg"
+    tools:context=".UniqueDataActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="vertical">
 
-        <Space
+        <com.google.android.material.appbar.AppBarLayout
+            style="@style/Theme.AppCompat.Light"
             android:layout_width="match_parent"
-            android:layout_height="15dp" />
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/backToHome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_back" />
+
+                    <Space
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/deviceDetailHeader"
+                        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Device Details"
+                        android:textColor="#ffff" />
+
+
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal">
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Device Name:"
-                android:layout_gravity="center"
-                android:gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Device Name:" />
 
-            <EditText
-                android:id="@+id/editText_nameOfDevice"
-                android:layout_width="190dp"
-                android:layout_height="match_parent"
-                android:text="No Device Found"
-                android:layout_gravity="center"
-                android:gravity="center"/>
-            <Button
-                android:id="@+id/btn_changeDeviceName"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:text="Change"
-                android:layout_gravity="end"/>
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/editText_nameOfDevice"
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal"
+                    android:textAlignment="center"
+                    android:focusedByDefault="false"
+                    android:defaultFocusHighlightEnabled="false"
+                    android:text="No Device Found" />
+
+                <ImageView
+                    android:id="@+id/btn_changeDeviceName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_check" />
 
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="17dp" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/textview_plantLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Plant Location:"
-            android:layout_gravity=""/>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="17dp" />
-
-        <TextView
-            android:id="@+id/textview_lastUpdated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Last Updated:"
-            android:layout_gravity=""/>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="17dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="Date: 27/07/2020"
-                android:textSize="14dp"
-                android:textStyle="bold" />
 
             <Space
-                android:layout_width="220dp"
-                android:layout_height="match_parent" />
+                android:layout_width="match_parent"
+                android:layout_height="17dp" />
 
-            <ImageView
-                android:id="@+id/time_picker"
+            <TextView
+                android:id="@+id/textview_plantLocation"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Pick Time"
-                android:background="@drawable/ic_calendar"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity=""
+                android:text="Plant Location:" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="17dp" />
+
+            <TextView
+                android:id="@+id/textview_lastUpdated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity=""
+                android:text="Last Updated:" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="17dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Date: 27/07/2020"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+                <Space
+                    android:layout_width="220dp"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/time_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_calendar"
+                    android:text="Pick Time" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart"
+                android:layout_width="match_parent"
+                android:layout_height="380dp" />
+
 
         </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
-
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/barChart"
-            android:layout_width="match_parent"
-            android:layout_height="380dp"/>
-
-        <Button
-            android:id="@+id/backToHome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/common_google_signin_btn_text_dark_disabled"
-            android:fontFamily="sans-serif-medium"
-            android:text="Back"
-            android:textAllCaps="false"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
     </LinearLayout>
 </RelativeLayout>

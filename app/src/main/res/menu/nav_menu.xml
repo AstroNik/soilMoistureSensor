@@ -46,7 +46,7 @@
 
     </group>
 
-    <item android:title="">
+    <item android:title="Logout">
         <menu>
             <item
                 android:id="@+id/Logout"

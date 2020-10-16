@@ -174,7 +174,6 @@ class Notifications : AppCompatActivity() {
 
         backToHome.setOnClickListener {
             finish()
-            startActivity((Intent(this, Home::class.java)))
         }
 
     }
@@ -204,7 +203,7 @@ class Notifications : AppCompatActivity() {
             super.onPostExecute(result)
             if (result.equals(null)) {
                 val t =
-                    Toast.makeText(this@Notifications, "No New Notifications", Toast.LENGTH_LONG)
+                    Toast.makeText(this@Notifications, "No New Notifications", Toast.LENGTH_SHORT)
                 t.setGravity(Gravity.CENTER, 0, 0)
                 t.show()
             } else {

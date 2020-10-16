@@ -13,17 +13,33 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Notifications"></activity>
-        <activity android:name=".PlantDBViewEndpoint" />
-        <activity android:name=".Settings" />
-        <activity android:name=".UniqueDataActivity" />
-        <activity android:name=".ResetPassword" />
-        <activity android:name=".SignIn" />
+        <activity
+            android:name=".Notifications"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PlantDBViewEndpoint"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Settings"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UniqueDataActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ResetPassword"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SignIn"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SignUp" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".SignUp"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

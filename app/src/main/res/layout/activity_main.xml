@@ -50,12 +50,12 @@
 
         <Button
             android:id="@+id/signin"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/common_google_signin_btn_text_dark_default"
             android:fontFamily="sans-serif-medium"
             android:text="SIGN IN"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <Space
             android:layout_width="match_parent"
@@ -63,12 +63,12 @@
 
         <Button
             android:id="@+id/signup"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/common_google_signin_btn_text_dark_default"
             android:fontFamily="sans-serif-medium"
-            android:text="SIGN UP"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:text="SIGN UP"/>
 
     </LinearLayout>
 

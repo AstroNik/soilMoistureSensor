@@ -52,7 +52,6 @@ class UniqueDataActivity : AppCompatActivity() {
 
         backToHome.setOnClickListener {
             finish()
-            startActivity((Intent(this, Home::class.java)))
         }
 
 //        val intent = intent
@@ -157,7 +156,7 @@ class UniqueDataActivity : AppCompatActivity() {
                     r.put("token", mtoken)
 
                     SendJsonDataToUpateDeviceName().execute(r.toString());
-                    this.setTitle("Device Details for "+ deviceName)
+                    deviceDetailHeader.text = "Device Details for "+ deviceName
                     val t = Toast.makeText(this, "Device Name Changed Successfully", Toast.LENGTH_SHORT)
                     t.setGravity(Gravity.CENTER, 0, 0)
                     t.show()
@@ -300,7 +299,7 @@ class UniqueDataActivity : AppCompatActivity() {
         editText_nameOfDevice.setText(deviceName)
         textview_lastUpdated.text =
             "Last Updated: " + firstEndPointList?.get(0)?.dateTime?.let { formatDateFull(it) }
-        this.setTitle("Device Details for "+ deviceName)
+        deviceDetailHeader.text = "Device Details for "+ deviceName
     }
 
     private fun showbarChart(list: ArrayList<UniqueData>) {
