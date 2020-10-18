@@ -59,7 +59,6 @@ class UniqueDataActivity : AppCompatActivity() {
         userDevices = intent.getSerializableExtra("userDevices") as ArrayList<String>
         position = intent.getIntExtra("itemClicked", -1)
         val firstEndpointData = intent.getStringExtra("FirstEndpointData")
-        val secondEndPointData = intent.getStringExtra("SecondEndpointData")
         firstEndPointList = handleJsonforFirstEndPoint(firstEndpointData)!!
         deviceName = firstEndPointList?.get(0)?.deviceName.toString()
         populateValues(firstEndPointList)
@@ -69,15 +68,8 @@ class UniqueDataActivity : AppCompatActivity() {
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
         date.text = "Date: " + day + "/" + (month + 1) + "/" + year
+        handleDataForSpecificDate("" + year + "-" + formatMonth(month) + "-" + formatDay(day) + "T00:00:00.000Z")
 
-
-        val secondEndPointList = handleJson(secondEndPointData)
-        if (secondEndPointList != null) {
-            showbarChart(secondEndPointList)
-        } else {
-//            a()
-            Toast.makeText(this, "No data to display in chart", Toast.LENGTH_SHORT).show()
-        }
 
 
         btn_changeDeviceName.setOnClickListener {
@@ -95,23 +87,11 @@ class UniqueDataActivity : AppCompatActivity() {
             val dpd = DatePickerDialog(
                 this,
                 DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
-                    var month = ""
-                    var day = ""
-                    if (mMonth < 9 && mDay < 10) {
-                        month = "0" + (mMonth + 1)
-                        day = "0" + mDay
-                    } else if (mMonth < 9) {
-                        month = "0" + (mMonth + 1)
-                        day = "" + mDay
-                    } else if (mDay < 10) {
-                        day = "0" + mDay
-                        month = "" + (mMonth + 1)
-                    } else {
-                        month = "" + (mMonth + 1)
-                        day = "" + mDay
-                    }
+                    var month = formatMonth(mMonth)
+                    var day = formatDay(mDay)
                     date.text = ("Date: " + day + "/" + (month) + "/" + mYear)
                     handleDataForSpecificDate("" + mYear + "-" + (month) + "-" + day + "T00:00:00.000Z")
+
                 },
                 year,
                 month,
@@ -238,6 +218,7 @@ class UniqueDataActivity : AppCompatActivity() {
                 showbarChart(list)
             } else {
                 barChart.clear()
+                Toast.makeText(this@UniqueDataActivity, "No data to display", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -319,7 +300,7 @@ class UniqueDataActivity : AppCompatActivity() {
         val barDataSet = BarDataSet(barEntry, "Moisture Percentages")
         barDataSet.colors = ColorTemplate.createColors(ColorTemplate.LIBERTY_COLORS)
         barDataSet.valueTextColor = Color.BLACK
-        barDataSet.valueTextSize = 16f
+        barDataSet.valueTextSize = 14f
 
         val barData = BarData(barDataSet)
         barData.setBarWidth(0.1f); // set custom bar width
@@ -335,35 +316,11 @@ class UniqueDataActivity : AppCompatActivity() {
         barChart.getXAxis().isGranularityEnabled = true
         barChart.data = barData
         barChart.description.text = "Moisture percentages at different times"
-        barChart.animateY(1500)
+        barChart.animateY(1700)
 
     }
-
 }
 
-
-private fun handleJson(jsonString: String?): ArrayList<UniqueData>? {
-    if (jsonString.equals(null))
-        return null
-    try {
-        val jsonArray = JSONArray(jsonString)
-        val list = ArrayList<UniqueData>()
-        if (jsonArray.getJSONObject(position) != null) {
-            val jsonObject = jsonArray.getJSONObject(position)
-            list.add(
-                UniqueData(
-                    jsonObject.getInt("deviceId"),
-                    jsonObject.getString("dateTime"),
-                    jsonObject.getInt("soilMoisturePercent")
-                )
-            )
-        }
-        return list
-    } catch (e: JSONException) {
-        e.printStackTrace()
-    }
-    return null
-}
 
 private fun handleJsonForThirdEndpoint(jsonString: String?): ArrayList<UniqueData>? {
     if (jsonString.equals(null))
@@ -445,5 +402,22 @@ fun formatDateFull(date: String): String {
     deviceDate = deviceDate.replace("T".toRegex(), " ")
     deviceDate = deviceDate.toDate().formatTo("dd MMM yyyy h:mm a")
     return deviceDate
+}
+
+fun formatMonth(month: Int): String {
+
+    if (month < 9) {
+        return "0"+(month+1)
+    }else{
+        return ""+ (month+1)
+    }
+}
+
+fun formatDay(day: Int): String{
+    if (day < 10) {
+        return "0" + day
+    } else {
+        return "" + day
+    }
 }
 

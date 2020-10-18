@@ -73,7 +73,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     mtoken = idToken.toString()
                     postRequestToGetUserData()
                     postRequestToGetDashboardData()
-                    postRequestToGetUniqueDeviceData()
                 } else {
                     Log.d("ERROR Creating Token", task.exception.toString());
                 }
@@ -155,18 +154,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         startActivity(intentForUnique)
     }
 
-    /**
-     * Method to add uid, token and timezone to the header and do a post request
-     * @author Ehsan Kabir
-     */
-    private fun postRequestToGetUniqueDeviceData() {
-        val r = JSONObject()
-        val timeZone = TimeZone.getDefault();
-        r.put("timezone", timeZone.id)
-        r.put("uid", muid)
-        r.put("token", mtoken)
-        SendJsonDataToSecondEndPoint().execute(r.toString());
-    }
 
     /**
      * Method to add uid, token to the header and do a post request
@@ -238,64 +225,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         }
     }
 
-    /**
-     * Inner Class to get Unique data of devices by calling our
-     * endpoint "https://www.ecoders.ca/uniqueDeviceData"
-     *
-     * @author Ehsan Kabir
-     */
-    inner class SendJsonDataToSecondEndPoint :
-        AsyncTask<String?, String?, String?>() {
-
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-            intentForUnique.putExtra("SecondEndpointData", result)
-        }
-
-        override fun doInBackground(vararg params: String?): String? {
-            val JsonDATA = params[0]!!
-            var urlConnection: HttpURLConnection? = null
-            var reader: BufferedReader? = null
-            try {
-                val url = URL("https://www.ecoders.ca/uniqueDeviceData");
-                urlConnection = url.openConnection() as HttpURLConnection;
-                urlConnection.setDoOutput(true);
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.setRequestProperty("Authorization", mtoken);
-                urlConnection.setRequestProperty("Accept", "application/json");
-                val writer: Writer =
-                    BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
-                writer.write(JsonDATA);
-                writer.close();
-                val inputStream: InputStream = urlConnection.getInputStream();
-                if (inputStream == null) {
-                    return null;
-                }
-                reader = BufferedReader(InputStreamReader(inputStream))
-                var inputLine: String? = reader.readLine()
-                if (inputLine.equals("null")) {
-                    return null
-                } else {
-                    return inputLine
-                }
-            } catch (ex: Exception) {
-                Log.e(TAG, "Connection Failed", ex);
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (ex: Exception) {
-                        Log.e(TAG, "Error closing stream", ex);
-                    }
-                }
-            }
-            return null
-        }
-    }
 
     /**
      * Method to add uid and token to the header and do a post request
@@ -330,7 +259,6 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
                 var list = handleJson(result)
 
-                progressbarDashboard.visibility = View.GONE
                 dashboardLayout.visibility = View.VISIBLE
                 
                 adapter.submitList(list)
