@@ -74,10 +74,11 @@
             android:id="@+id/login"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:background="@color/common_google_signin_btn_text_dark_default"
+            android:background="#8c9e75"
             android:fontFamily="sans-serif-medium"
             android:text="Sign In"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/common_google_signin_btn_text_dark_default"
             android:textSize="18sp" />
 
         <Space
@@ -88,10 +89,11 @@
             android:id="@+id/goBack"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:background="@color/common_google_signin_btn_text_dark_default"
+            android:background="#8c9e75"
             android:fontFamily="sans-serif-medium"
             android:text="Cancel"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/common_google_signin_btn_text_dark_default"
             android:textSize="18sp" />
 
         <Space

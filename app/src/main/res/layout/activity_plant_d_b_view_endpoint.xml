@@ -20,6 +20,8 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
+                android:background="#8c9e75"
+
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar">
 
@@ -163,12 +165,13 @@
             android:id="@+id/btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/common_google_signin_btn_text_dark_default"
-            android:fontFamily="sans-serif-medium"
-            android:text="SEARCH"
             android:layout_gravity="bottom"
+            android:background="#8c9e75"
+            android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:text="SEARCH"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/common_google_signin_btn_text_dark_default" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

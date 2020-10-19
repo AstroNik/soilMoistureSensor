@@ -19,6 +19,8 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
+                android:background="#8c9e75"
+
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar">
 
@@ -122,10 +124,11 @@
                 android:id="@+id/button_authenticate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/common_google_signin_btn_text_dark_default"
+                android:background="#8c9e75"
                 android:fontFamily="sans-serif-medium"
                 android:text="Authenticate"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/common_google_signin_btn_text_dark_default" />
 
         </LinearLayout>
 
@@ -224,10 +227,11 @@
                 android:id="@+id/button_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/common_google_signin_btn_text_dark_default"
+                android:background="#8c9e75"
                 android:fontFamily="sans-serif-medium"
                 android:text="Update"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/common_google_signin_btn_text_dark_default" />
 
         </LinearLayout>
     </LinearLayout>
