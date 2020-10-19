@@ -249,6 +249,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
+            progressbarDashboard.visibility = View.GONE
+            dashboardLayout.visibility = View.VISIBLE
             if (result.equals(null)) {
                 val t = Toast.makeText(this@Home, "No devices to display", Toast.LENGTH_LONG)
                 t.setGravity(Gravity.CENTER, 0, 0)
@@ -256,11 +258,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             } else {
                 intentForUnique.putExtra("FirstEndpointData", result)
                 intentForUnique.putExtra("userDevices", userDevices)
-
                 var list = handleJson(result)
-
-                dashboardLayout.visibility = View.VISIBLE
-                
                 adapter.submitList(list)
                 dashboardItem_list.adapter = adapter
                 adapter.notifyDataSetChanged();

@@ -2,20 +2,21 @@ package com.example.soilmoisturesensor
 
 import android.content.Intent
 import android.os.AsyncTask
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
+
 
 /**
  * Sign up activity
@@ -34,6 +35,14 @@ class SignUp : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
+
+        val displaymetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displaymetrics)
+        val width = displaymetrics.widthPixels
+        val buttonWidth = width / 2
+
+        ok.width = (buttonWidth)
+        cancel.width = buttonWidth
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance()
@@ -93,7 +102,7 @@ class SignUp : AppCompatActivity() {
                                         Log.d("ERROR Creating Token", task.exception.toString());
                                     }
                                 }
-                            startActivity(Intent(this, MainActivity::class.java))
+                            startActivity(Intent(this, SignIn::class.java))
 
                             Toast.makeText(this, "SignUp Successful", Toast.LENGTH_LONG).show()
                         } else {

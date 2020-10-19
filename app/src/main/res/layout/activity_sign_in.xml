@@ -22,8 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="SIGN IN"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
             android:textSize="36sp"
-            android:textStyle="bold"
             tools:layout_editor_absoluteX="138dp"
             tools:layout_editor_absoluteY="56dp" />
 
@@ -72,12 +72,13 @@
 
         <Button
             android:id="@+id/login"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:background="@color/common_google_signin_btn_text_dark_default"
             android:fontFamily="sans-serif-medium"
+            android:text="Sign In"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:text="SIGN IN"/>
+            android:textSize="18sp" />
 
         <Space
             android:layout_width="match_parent"
@@ -85,12 +86,13 @@
 
         <Button
             android:id="@+id/goBack"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:background="@color/common_google_signin_btn_text_dark_default"
             android:fontFamily="sans-serif-medium"
-            android:text="CANCEL"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:text="Cancel"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="18sp" />
 
         <Space
             android:layout_width="match_parent"
