@@ -300,8 +300,8 @@ class UniqueDataActivity : AppCompatActivity() {
         val barDataSet = BarDataSet(barEntry, "Moisture Percentages")
         barDataSet.colors = ColorTemplate.createColors(ColorTemplate.LIBERTY_COLORS)
         barDataSet.valueTextColor = Color.BLACK
-        barDataSet.valueTextSize = 14f
-
+        barDataSet.valueTextSize = 13f
+        barDataSet.setDrawValues(false);
         val barData = BarData(barDataSet)
         barData.setBarWidth(0.1f); // set custom bar width
 
@@ -309,15 +309,16 @@ class UniqueDataActivity : AppCompatActivity() {
         barChart.setDragEnabled(true)
         barChart.setVisibleXRangeMaximum(3f)
 
+        barChart.getXAxis().setLabelCount(24)
         barChart.setPinchZoom(true);
 
         barChart.getXAxis().position = XAxis.XAxisPosition.BOTTOM
-        barChart.getXAxis().mAxisMaximum = 5f
+
         barChart.getXAxis().isGranularityEnabled = true
         barChart.data = barData
         barChart.description.text = "Moisture percentages at different times"
         barChart.animateY(1700)
-
+        barChart.invalidate()
     }
 }
 

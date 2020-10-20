@@ -129,6 +129,10 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 startActivity(intentForSetting)
             }
 
+            R.id.DeviceSetup ->{
+                startActivity(Intent(this,DeviceSetup::class.java))
+            }
+
             R.id.Notifications -> {
 
                 val intent = Intent(this@Home, Notifications::class.java)
