@@ -82,7 +82,6 @@ class SignUp : AppCompatActivity() {
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
                                         val idToken = task.result!!.token
-                                        //TODO: Send User's Name/LastName Email and idToken
                                         muid = mUser.uid
 
                                         memail = mEmail  //sub this out to just mEmail when sending
