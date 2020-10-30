@@ -8,13 +8,11 @@ import android.os.AsyncTask
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
 import android.util.Log
 import android.view.Gravity
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -53,8 +51,6 @@ class UniqueDataActivity : AppCompatActivity() {
         backToHome.setOnClickListener {
             finish()
         }
-
-//        val intent = intent
 
         userDevices = intent.getSerializableExtra("userDevices") as ArrayList<String>
         position = intent.getIntExtra("itemClicked", -1)
@@ -109,7 +105,6 @@ class UniqueDataActivity : AppCompatActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val idToken = task.result!!.token
-                    //TODO: Send User's Name/LastName Email and idToken
                     muid = mUser.uid
                     mtoken = idToken.toString()
                     postRequestToGetSpecificDateData(s);
@@ -303,7 +298,7 @@ class UniqueDataActivity : AppCompatActivity() {
         barDataSet.valueTextSize = 13f
         barDataSet.setDrawValues(false);
         val barData = BarData(barDataSet)
-        barData.setBarWidth(0.1f); // set custom bar width
+        barData.setBarWidth(0.03f); // set custom bar width
 
         barChart.setFitBars(true)
         barChart.setDragEnabled(true)
