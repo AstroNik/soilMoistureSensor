@@ -298,7 +298,7 @@ class UniqueDataActivity : AppCompatActivity() {
         barDataSet.valueTextSize = 13f
         barDataSet.setDrawValues(false);
         val barData = BarData(barDataSet)
-        barData.setBarWidth(0.1f); // set custom bar width
+        barData.setBarWidth(0.03f); // set custom bar width
 
         barChart.setFitBars(true)
         barChart.setDragEnabled(true)
