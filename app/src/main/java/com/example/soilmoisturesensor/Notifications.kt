@@ -230,7 +230,6 @@ class Notifications : AppCompatActivity() {
 
                 list = handleJson2(result)
 
-
                 notificationsRecylerView.layoutManager = LinearLayoutManager(this@Notifications)
                 notification_adapter = NotificationRecyclerViewAdapter()
                 notification_adapter.submitList(list)

@@ -58,9 +58,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
-<!--            put your content here-->
-<!--            @Manpreet-->
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPaper"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent= "true"
+                android:clipToPadding="false"
+                android:foregroundGravity="center"
+                android:overScrollMode="never"/>
 
         </LinearLayout>
     </LinearLayout>
