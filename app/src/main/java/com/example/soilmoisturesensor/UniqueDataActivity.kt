@@ -293,12 +293,12 @@ class UniqueDataActivity : AppCompatActivity() {
             x++
         }
         val barDataSet = BarDataSet(barEntry, "Moisture Percentages")
-        barDataSet.colors = ColorTemplate.createColors(ColorTemplate.LIBERTY_COLORS)
+        barDataSet.setColors(Color.rgb(0,0,155))
         barDataSet.valueTextColor = Color.BLACK
         barDataSet.valueTextSize = 13f
         barDataSet.setDrawValues(false);
         val barData = BarData(barDataSet)
-        barData.setBarWidth(0.03f); // set custom bar width
+        barData.setBarWidth(0.1f); // set custom bar width
 
         barChart.setFitBars(true)
         barChart.setDragEnabled(true)

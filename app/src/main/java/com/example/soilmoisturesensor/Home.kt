@@ -256,7 +256,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             progressbarDashboard.visibility = View.GONE
             dashboardLayout.visibility = View.VISIBLE
             if (result.equals(null)) {
-                val t = Toast.makeText(this@Home, "No devices to display", Toast.LENGTH_LONG)
+                val t = Toast.makeText(this@Home, "No devices to display\nPlease setup a device first.\nGo to device setup in the menu for walkthrough", Toast.LENGTH_LONG)
                 t.setGravity(Gravity.CENTER, 0, 0)
                 t.show()
             } else {
