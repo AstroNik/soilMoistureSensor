@@ -58,6 +58,19 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:tabGravity="fill"
+                app:tabMode="scrollable">
+            </com.google.android.material.tabs.TabLayout>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPaper"
                 android:layout_width="match_parent"
@@ -65,7 +78,9 @@
                 android:layout_centerInParent= "true"
                 android:clipToPadding="false"
                 android:foregroundGravity="center"
-                android:overScrollMode="never"/>
+                android:overScrollMode="never">
+
+            </androidx.viewpager.widget.ViewPager>
 
         </LinearLayout>
     </LinearLayout>
