@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mAuth:FirebaseAuth
+    private lateinit var mAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,18 +25,18 @@ class MainActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
 
         signin.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(this,SignIn::class.java ))
+            startActivity(Intent(this, SignIn::class.java))
         })
 
         signup.setOnClickListener(View.OnClickListener {
-                view->register()
+            register()
         })
 
 
     }
 
 
-    private fun register(){
-        startActivity(Intent(this,SignUp::class.java ))
+    private fun register() {
+        startActivity(Intent(this, SignUp::class.java))
     }
 }

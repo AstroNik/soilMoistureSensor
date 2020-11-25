@@ -31,11 +31,15 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+/**
+ * Activity that handles details of a device when clicked from the dashboard
+ * @author Ehsan Kabir
+ */
 private var position: Int = -1
-private lateinit var userDevices : ArrayList<String>
+private lateinit var userDevices: ArrayList<String>
 private lateinit var firstEndPointList: ArrayList<SensorData>
 private lateinit var mAuth: FirebaseAuth
-private lateinit var deviceName : String
+private lateinit var deviceName: String
 private val TAG = "";
 var muid = ""
 var mtoken = ""
@@ -67,18 +71,18 @@ class UniqueDataActivity : AppCompatActivity() {
         handleDataForSpecificDate("" + year + "-" + formatMonth(month) + "-" + formatDay(day) + "T00:00:00.000Z")
 
 
-
+        //Change device name button on click handler
         btn_changeDeviceName.setOnClickListener {
             val deviceName = editText_nameOfDevice.text.toString()
-            if (deviceName.isEmpty()){
+            if (deviceName.isEmpty()) {
                 Toast.makeText(this, "Device name can not be blank", Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
                 closeKeyBoard()
                 changeDeviceName(deviceName)
             }
         }
 
-
+        //calendar button on click handler
         time_picker.setOnClickListener {
             val dpd = DatePickerDialog(
                 this,
@@ -97,9 +101,12 @@ class UniqueDataActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Method to handle specific date requests from the calendar
+     * and shows the graph
+     */
     private fun handleDataForSpecificDate(s: String) {
 
-        //Dashboard
         val mUser = FirebaseAuth.getInstance().currentUser
         mUser!!.getIdToken(true)
             .addOnCompleteListener { task ->
@@ -115,8 +122,10 @@ class UniqueDataActivity : AppCompatActivity() {
     }
 
 
-
-    private fun changeDeviceName(s : String) {
+    /**
+     * Method to change Device name
+     */
+    private fun changeDeviceName(s: String) {
 
         val mUser = FirebaseAuth.getInstance().currentUser
         mUser!!.getIdToken(true)
@@ -131,8 +140,9 @@ class UniqueDataActivity : AppCompatActivity() {
                     r.put("token", mtoken)
 
                     SendJsonDataToUpateDeviceName().execute(r.toString());
-                    deviceDetailHeader.text = "Device Details for "+ deviceName
-                    val t = Toast.makeText(this, "Device Name Changed Successfully", Toast.LENGTH_SHORT)
+                    deviceDetailHeader.text = "Device Details for " + deviceName
+                    val t =
+                        Toast.makeText(this, "Device Name Changed Successfully", Toast.LENGTH_SHORT)
                     t.setGravity(Gravity.CENTER, 0, 0)
                     t.show()
                     startActivity(Intent(this, Home::class.java))
@@ -142,6 +152,10 @@ class UniqueDataActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Inner class that updates device name Asynchronously.
+     * endpoint /updateDeviceName
+     */
     inner class SendJsonDataToUpateDeviceName :
         AsyncTask<String?, String?, String?>() {
 
@@ -156,7 +170,7 @@ class UniqueDataActivity : AppCompatActivity() {
                 urlConnection.setDoOutput(true);
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.setRequestProperty ("Authorization", mtoken);
+                urlConnection.setRequestProperty("Authorization", mtoken);
                 urlConnection.setRequestProperty("Accept", "application/json");
                 val writer: Writer =
                     BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
@@ -203,6 +217,10 @@ class UniqueDataActivity : AppCompatActivity() {
         SendJsonDataToThirdEndPoint().execute(r.toString());
     }
 
+    /**
+     * Inner class that updates graph when a date is picked from date picker Asynchronously.
+     * endpoint /specificDate
+     */
     inner class SendJsonDataToThirdEndPoint :
         AsyncTask<String?, String?, String?>() {
 
@@ -213,7 +231,8 @@ class UniqueDataActivity : AppCompatActivity() {
                 showbarChart(list)
             } else {
                 barChart.clear()
-                Toast.makeText(this@UniqueDataActivity, "No data to display", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@UniqueDataActivity, "No data to display", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -262,6 +281,10 @@ class UniqueDataActivity : AppCompatActivity() {
             return null
         }
     }
+
+    /**
+     * Method to close keyboard
+     */
     private fun closeKeyBoard() {
         val view = this.currentFocus
         if (view != null) {
@@ -270,14 +293,20 @@ class UniqueDataActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Method that populates device name and last updated time
+     */
     private fun populateValues(firstEndPointList: ArrayList<SensorData>?) {
-
         editText_nameOfDevice.setText(deviceName)
         textview_lastUpdated.text =
             "Last Updated: " + firstEndPointList?.get(0)?.dateTime?.let { formatDateFull(it) }
-        deviceDetailHeader.text = "Device Details for "+ deviceName
+        deviceDetailHeader.text = "Device Details for " + deviceName
     }
 
+    /**
+     * Method that populates the bar graph
+     * @param ArrayList<UniqueData>
+     */
     private fun showbarChart(list: ArrayList<UniqueData>) {
         val barChart = findViewById(R.id.barChart) as BarChart
         val barEntry = ArrayList<BarEntry>()
@@ -293,7 +322,7 @@ class UniqueDataActivity : AppCompatActivity() {
             x++
         }
         val barDataSet = BarDataSet(barEntry, "Moisture Percentages")
-        barDataSet.setColors(Color.rgb(0,0,155))
+        barDataSet.setColors(Color.rgb(0, 0, 155))
         barDataSet.valueTextColor = Color.BLACK
         barDataSet.valueTextSize = 13f
         barDataSet.setDrawValues(false);
@@ -302,7 +331,7 @@ class UniqueDataActivity : AppCompatActivity() {
 
         barChart.setFitBars(true)
         barChart.setDragEnabled(true)
-        barChart.setVisibleXRangeMaximum(3f)
+        barChart.setVisibleXRangeMaximum(12f)
 
         barChart.getXAxis().setLabelCount(24)
         barChart.setPinchZoom(true);
@@ -317,7 +346,11 @@ class UniqueDataActivity : AppCompatActivity() {
     }
 }
 
-
+/**
+ * Accepts json String, extracts data and creates an array list of unique data
+ * @param jsonString
+ * @return ArrayList<UniqueData>
+ */
 private fun handleJsonForThirdEndpoint(jsonString: String?): ArrayList<UniqueData>? {
     if (jsonString.equals(null))
         return null
@@ -345,6 +378,11 @@ private fun handleJsonForThirdEndpoint(jsonString: String?): ArrayList<UniqueDat
     return null
 }
 
+/**
+ * Accepts json String, extracts data and creates an array list of sensor data
+ * @param jsonString
+ * @return ArrayList<SensorData>
+ */
 private fun handleJsonforFirstEndPoint(jsonString: String?): ArrayList<SensorData>? {
     try {
         val jsonArray = JSONArray(jsonString)
@@ -371,6 +409,11 @@ private fun handleJsonforFirstEndPoint(jsonString: String?): ArrayList<SensorDat
     return null
 }
 
+
+/**
+ * All the methods below are some of the methods to format the date according to need
+ *
+ */
 fun formatDate(date: String): String {
     var deviceDate = date.replace("\\..*".toRegex(), "")
     deviceDate = deviceDate.replace("T".toRegex(), " ")
@@ -403,13 +446,13 @@ fun formatDateFull(date: String): String {
 fun formatMonth(month: Int): String {
 
     if (month < 9) {
-        return "0"+(month+1)
-    }else{
-        return ""+ (month+1)
+        return "0" + (month + 1)
+    } else {
+        return "" + (month + 1)
     }
 }
 
-fun formatDay(day: Int): String{
+fun formatDay(day: Int): String {
     if (day < 10) {
         return "0" + day
     } else {

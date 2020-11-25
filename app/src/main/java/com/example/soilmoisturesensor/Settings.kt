@@ -19,6 +19,11 @@ import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * Activity to modify user informations
+ * @author Ehsan Kabir
+ */
+
 private lateinit var first_name: String
 private lateinit var last_name: String
 private lateinit var email: String
@@ -47,12 +52,19 @@ class Settings : AppCompatActivity() {
 
         val currentUser = auth.currentUser
 
+        //Password authentication layout visible
         layoutPassword.visibility = View.VISIBLE
         layoutUpdateEmail.visibility = View.GONE
 
+        //Back to Dashboard
         backToLoginFromemail.setOnClickListener {
             finish()
         }
+
+        /**
+         * Method to authenticate user with their password before
+         * letting them modify other informations
+         */
 
         button_authenticate.setOnClickListener {
             val password = edit_text_password.text.toString()
@@ -85,6 +97,10 @@ class Settings : AppCompatActivity() {
                     }
             }
 
+            /**
+             * Once the user is Authenticated, method to
+             * let them modify other information in fire base
+             */
             button_update.setOnClickListener { view ->
                 closeKeyBoard()
                 val email = edit_text_email.text.toString()
@@ -104,7 +120,7 @@ class Settings : AppCompatActivity() {
                 }
                 if (password.isEmpty() || password.length < 6) {
                     edit_text_newPassword.error =
-                        "Password required and must be atleast six characters"
+                        "Password required and must be at least six characters"
                     edit_text_newPassword.requestFocus()
                     return@setOnClickListener
                 }
@@ -123,20 +139,9 @@ class Settings : AppCompatActivity() {
                     user!!.updatePassword(password)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                Toast.makeText(
-                                    this,
-                                    "Passsword successfully changed",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
                                 user.updateEmail(email)
                                     .addOnCompleteListener { task ->
                                         if (task.isSuccessful) {
-                                            Toast.makeText(
-                                                this,
-                                                "Email change successful",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
                                             val r = JSONObject()
                                             r.put("uid", id)
                                             r.put("email", email)
@@ -147,6 +152,11 @@ class Settings : AppCompatActivity() {
 
                                             //#call to async class
                                             SendJsonDataToServer().execute(r.toString());
+                                            Toast.makeText(
+                                                this,
+                                                "Information update successful",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
                                             auth.signOut()
                                             startActivity(Intent(this, SignIn::class.java))
                                         } else {
@@ -160,7 +170,7 @@ class Settings : AppCompatActivity() {
                             } else {
                                 Toast.makeText(
                                     this,
-                                    "",
+                                    "Password change failed",
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()
@@ -170,6 +180,10 @@ class Settings : AppCompatActivity() {
             }
         }
     }
+
+    /**
+     * Method that closes the keyboard
+     */
     private fun closeKeyBoard() {
         val view = this.currentFocus
         if (view != null) {
@@ -180,6 +194,10 @@ class Settings : AppCompatActivity() {
 
 
     //ASYNC Task class - POST Request
+    /**
+     * Inner class that updates the user data through
+     * endpoint /updateUserData
+     */
     inner class SendJsonDataToServer :
         AsyncTask<String?, String?, String?>() {
 

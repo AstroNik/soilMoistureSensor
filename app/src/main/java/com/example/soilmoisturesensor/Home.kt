@@ -18,14 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.nav_header.*
-import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -57,14 +54,20 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        //Spinner while the data is loading
         progressbarDashboard.visibility = View.VISIBLE
 
+        //Creating intents to pass data to different activity
         intentForUnique = Intent(this@Home, UniqueDataActivity::class.java)
         intentForSetting = Intent(this@Home, Settings::class.java)
 
+        //Initializing Firebase Authentication
         mAuth = FirebaseAuth.getInstance()
+
+        //Getting the logged in user
         val mUser = FirebaseAuth.getInstance().currentUser
 
+        //Getting token from the user
         mUser!!.getIdToken(true)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -77,10 +80,12 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                     Log.d("ERROR Creating Token", task.exception.toString());
                 }
             }
+
+        //Setting up dashboard cards
         dashboardItem_list.layoutManager = LinearLayoutManager(this@Home)
         adapter = RecyclerAdapter(this)
 
-
+        //Setting up the app title bar to have the navigation drawer icon
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         drawerlayout = findViewById(R.id.drawerLayout)
@@ -89,6 +94,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         val Toggle = ActionBarDrawerToggle(
             this, drawerlayout, toolbar, 0, 0
         )
+
+        //This is to listen to which drawer element is clicked
         drawerlayout.addDrawerListener(Toggle)
         Toggle.syncState()
         navigationView.setNavigationItemSelectedListener(this)
@@ -110,7 +117,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 startActivity(Intent(applicationContext, Home::class.java))
             }
 
-            R.id.PlantDatabase ->{
+            R.id.PlantDatabase -> {
                 startActivity(Intent(applicationContext, PlantDBViewEndpoint::class.java))
             }
 
@@ -129,15 +136,13 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 startActivity(intentForSetting)
             }
 
-            R.id.DeviceSetup ->{
-                startActivity(Intent(this,DeviceSetup::class.java))
+            R.id.DeviceSetup -> {
+                startActivity(Intent(this, DeviceSetup::class.java))
             }
 
             R.id.Notifications -> {
-
                 val intent = Intent(this@Home, Notifications::class.java)
                 intent.putExtra("DeviceName", userDevices)
-
                 intent.putExtra("DeviceId", deviceId)
                 startActivity(intent)
 
@@ -256,7 +261,11 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
             progressbarDashboard.visibility = View.GONE
             dashboardLayout.visibility = View.VISIBLE
             if (result.equals(null)) {
-                val t = Toast.makeText(this@Home, "No devices to display\nPlease setup a device first.\nGo to device setup in the menu for walkthrough", Toast.LENGTH_LONG)
+                val t = Toast.makeText(
+                    this@Home,
+                    "No devices to display\nPlease setup a device first.\nGo to device setup in the menu for walkthrough",
+                    Toast.LENGTH_LONG
+                )
                 t.setGravity(Gravity.CENTER, 0, 0)
                 t.show()
             } else {
@@ -322,6 +331,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
      * endpoint /getSensorData and converting it to an arraylist
      * of SensorData
      *
+     * @return ArrayList<SensorData>
      * @author Ehsan Kabir
      */
     private fun handleJson(jsonString: String?): ArrayList<SensorData> {
@@ -350,8 +360,8 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     /**
      * This converts json String to a Array list
      * In this case, it is converting the data retrieved from the
-     * endpoint /getSensorData and converting it to an arraylist
-     * of SensorData
+     * endpoint /login and extracting user information and the
+     * devices under his account
      *
      * @author Ehsan Kabir
      */
@@ -383,6 +393,7 @@ class Home : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         }
 
 
+        //Setting the name of the user on the Top of navigation menu
         val name = navigationView.getHeaderView(0)
             .findViewById(R.id.textView_dashboard_header_name) as TextView
         name.text = userFirstName + " " + userLastName

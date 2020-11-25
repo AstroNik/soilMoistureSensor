@@ -5,6 +5,7 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +25,7 @@ import java.net.URL
  */
 class SignUp : AppCompatActivity() {
 
-    private lateinit var mAuth:FirebaseAuth
+    private lateinit var mAuth: FirebaseAuth
     private val TAG = "";
     var muid = ""
     var memail = ""
@@ -47,11 +48,12 @@ class SignUp : AppCompatActivity() {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance()
 
-        ok.setOnClickListener(View.OnClickListener { view-> register()
+        ok.setOnClickListener(View.OnClickListener { view ->
+            register()
 
         })
 
-        cancel.setOnClickListener{
+        cancel.setOnClickListener {
 
             startActivity(Intent(this, MainActivity::class.java))
         }
@@ -61,61 +63,81 @@ class SignUp : AppCompatActivity() {
      * SignUp method
      * @author Manpreet Sandhu
      */
-    private fun register(){
+    private fun register() {
 
         val mName = fullName.text.toString()
         val mEmail = emailAddress.text.toString()
         val mPwd = password1.text.toString()
         val mPwd1 = password2.text.toString()
 
-        if(!mName.isEmpty() && !mEmail.isEmpty() && !mPwd.isEmpty()){
+        if (!mName.isEmpty() && !mEmail.isEmpty() && !mPwd.isEmpty()) {
 
-            if(mPwd.equals(mPwd1)) {
+            if (!Patterns.EMAIL_ADDRESS.matcher(mEmail).matches()) {
+                Toast.makeText(
+                    this,
+                    "Email address not in correct format",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                if (mPwd.equals(mPwd1)) {
 
-                mAuth.createUserWithEmailAndPassword(mEmail, mPwd)
-                    .addOnCompleteListener(this, OnCompleteListener { task ->
+                    if (mPwd.length < 6) {
+                        Toast.makeText(
+                            this,
+                            "Password needs to be at least 6 characters",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
 
-                        if (task.isSuccessful) {
+                        mAuth.createUserWithEmailAndPassword(mEmail, mPwd)
+                            .addOnCompleteListener(this, OnCompleteListener { task ->
 
-                            val mUser = FirebaseAuth.getInstance().currentUser
-                            mUser!!.getIdToken(true)
-                                .addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        val idToken = task.result!!.token
-                                        muid = mUser.uid
+                                if (task.isSuccessful) {
 
-                                        memail = mEmail  //sub this out to just mEmail when sending
+                                    val mUser = FirebaseAuth.getInstance().currentUser
+                                    mUser!!.getIdToken(true)
+                                        .addOnCompleteListener { task ->
+                                            if (task.isSuccessful) {
+                                                val idToken = task.result!!.token
+                                                muid = mUser.uid
 
-                                        val firstSpace = mName.indexOf(" ")
-                                        mfirstName = mName.substring(0, firstSpace)
-                                        //split this into first and last name in the form
-                                        mlastName = mName.substring(firstSpace).trim()
+                                                memail =
+                                                    mEmail  //sub this out to just mEmail when sending
 
-                                        mtoken = idToken.toString() // can simply just pass
+                                                val firstSpace = mName.indexOf(" ")
+                                                mfirstName = mName.substring(0, firstSpace)
+                                                //split this into first and last name in the form
+                                                mlastName = mName.substring(firstSpace).trim()
 
-                                        //THE ENDPOINT IS https://www.ecoders.ca/addUser
-                                        //Invoking the Senddatatoserver using POST Request Method
-                                        sendDataToServer();
+                                                mtoken = idToken.toString() // can simply just pass
 
-                                    } else {
-                                        Log.d("ERROR Creating Token", task.exception.toString());
-                                    }
+                                                //THE ENDPOINT IS https://www.ecoders.ca/addUser
+                                                //Invoking the Senddatatoserver using POST Request Method
+                                                sendDataToServer();
+
+                                            } else {
+                                                Log.d(
+                                                    "ERROR Creating Token",
+                                                    task.exception.toString()
+                                                );
+                                            }
+                                        }
+                                    startActivity(Intent(this, SignIn::class.java))
+
+                                    Toast.makeText(this, "SignUp Successful", Toast.LENGTH_LONG)
+                                        .show()
+                                } else {
+                                    Toast.makeText(this, "Error :(", Toast.LENGTH_LONG).show()
+
                                 }
-                            startActivity(Intent(this, SignIn::class.java))
+                            })
+                    }
+                } else {
 
-                            Toast.makeText(this, "SignUp Successful", Toast.LENGTH_LONG).show()
-                        } else {
-                            Toast.makeText(this, "Error :(", Toast.LENGTH_LONG).show()
-
-                        }
-                    })
+                    Toast.makeText(this, "Password does not match", Toast.LENGTH_LONG).show()
+                }
             }
-            else{
-
-                Toast.makeText(this, "Password doesnot match", Toast.LENGTH_LONG).show()
-            }
-        }
-        else{
+        } else {
 
             Toast.makeText(this, "Please fill values", Toast.LENGTH_SHORT).show()
         }
@@ -129,12 +151,12 @@ class SignUp : AppCompatActivity() {
     fun sendDataToServer() {
 
         //JSON OBJECT
-        val r  = JSONObject()
+        val r = JSONObject()
         r.put("uid", muid)
         r.put("email", memail)
         r.put("firstName", mfirstName)
         r.put("lastName", mlastName)
-        r.put("token",mtoken)
+        r.put("token", mtoken)
 
         //#call to async class
         SendJsonDataToServer().execute(r.toString());
@@ -149,10 +171,10 @@ class SignUp : AppCompatActivity() {
      * @author Manpreet Sandhu
      */
     inner class SendJsonDataToServer :
-        AsyncTask<String?, String?, String?>(){
+        AsyncTask<String?, String?, String?>() {
 
         override fun doInBackground(vararg params: String?): String? {
-            var JsonResponse: String? = null
+            var JsonResponse: String? 
             val JsonDATA = params[0]!!
             var urlConnection: HttpURLConnection? = null
             var reader: BufferedReader? = null
@@ -164,11 +186,12 @@ class SignUp : AppCompatActivity() {
                 // is output buffer writter
                 urlConnection.setRequestMethod("POST");
                 urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.setRequestProperty ("Authorization", mtoken);
+                urlConnection.setRequestProperty("Authorization", mtoken);
                 //urlConnection.setRequestProperty("token", "token");
                 urlConnection.setRequestProperty("Accept", "application/json");
                 //set headers and method
-                val writer: Writer = BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
+                val writer: Writer =
+                    BufferedWriter(OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
                 writer.write(JsonDATA);
                 // json data
                 writer.close();
@@ -183,7 +206,7 @@ class SignUp : AppCompatActivity() {
 
                 var inputLine: String = ""
                 while ((inputLine.equals(reader.readLine())) != null) {
-                    buffer?.append(inputLine+"\n")
+                    buffer?.append(inputLine + "\n")
                 }
                 if (buffer?.length === 0) {
                     // Stream was empty. No point in parsing.
@@ -201,7 +224,7 @@ class SignUp : AppCompatActivity() {
                 }
                 return null
 
-            }catch (ex:Exception){
+            } catch (ex: Exception) {
 
             } finally {
                 if (urlConnection != null) {

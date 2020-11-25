@@ -21,25 +21,30 @@ class ResetPassword : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
 
-        resetPassword.setOnClickListener{
+        resetPassword.setOnClickListener {
             var userEmail = emailResetPassword.text.toString()
-
-            if (userEmail.isEmpty()){
+            if (userEmail.isEmpty()) {
                 Toast.makeText(this, "Insert valid email address", Toast.LENGTH_SHORT).show()
-            }else{
-                mAuth.sendPasswordResetEmail(userEmail).addOnCompleteListener{
-                    if (it.isSuccessful){
-                        Toast.makeText(this, "Email sent", Toast.LENGTH_SHORT).show()
+            } else {
+                mAuth.sendPasswordResetEmail(userEmail).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(
+                            this,
+                            "Email sent for password reset at $userEmail",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         startActivity(Intent(this, SignIn::class.java))
-                    }
-                    else{
-
-                        Toast.makeText(this, "Error occured: "+ it.exception?.message , Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Error: " + it.exception?.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
         }
-        goBackSignIn.setOnClickListener{
+        goBackSignIn.setOnClickListener {
             finish()
         }
     }
